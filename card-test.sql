@@ -2,13 +2,12 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 17.2
--- Dumped by pg_dump version 17.2
+-- Dumped from database version 16.6
+-- Dumped by pg_dump version 16.6
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
 SET idle_in_transaction_session_timeout = 0;
-SET transaction_timeout = 0;
 SET client_encoding = 'UTF8';
 SET standard_conforming_strings = on;
 SELECT pg_catalog.set_config('search_path', '', false);
@@ -26,12 +25,15 @@ SET default_table_access_method = heap;
 --
 
 CREATE TABLE public.cards (
-    name character varying(100) NOT NULL,
+    name character varying(255) NOT NULL,
     description character varying(255),
-    color character varying(7),
-    status character varying(50),
+    color character varying(255),
+    status character varying(255) DEFAULT 'To Do'::character varying,
     date_created timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
-    creator character varying(100) NOT NULL
+    creator character varying(255) NOT NULL,
+    is_active character(1) DEFAULT 'Y'::bpchar,
+    CONSTRAINT cards_is_active_check CHECK ((is_active = ANY (ARRAY['Y'::bpchar, 'N'::bpchar]))),
+    CONSTRAINT status_check CHECK (((status)::text = ANY (ARRAY[('To Do'::character varying)::text, ('In Progress'::character varying)::text, ('Done'::character varying)::text])))
 );
 
 
@@ -42,11 +44,11 @@ ALTER TABLE public.cards OWNER TO postgres;
 --
 
 CREATE TABLE public.users (
-    email character varying(100) NOT NULL,
+    email character varying(255) NOT NULL,
     password character varying(255) NOT NULL,
-    role character varying(10) NOT NULL,
+    role character varying(255) NOT NULL,
     date_created timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT users_role_check CHECK (((role)::text = ANY ((ARRAY['Member'::character varying, 'Admin'::character varying])::text[])))
+    CONSTRAINT users_role_check CHECK (((role)::text = ANY (ARRAY[('Member'::character varying)::text, ('Admin'::character varying)::text])))
 );
 
 
@@ -56,7 +58,7 @@ ALTER TABLE public.users OWNER TO postgres;
 -- Data for Name: cards; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.cards (name, description, color, status, date_created, creator) FROM stdin;
+COPY public.cards (name, description, color, status, date_created, creator, is_active) FROM stdin;
 \.
 
 
@@ -65,6 +67,8 @@ COPY public.cards (name, description, color, status, date_created, creator) FROM
 --
 
 COPY public.users (email, password, role, date_created) FROM stdin;
+adminone@administrators.com	$2a$10$5M44l1L2MPnM1bP7bH3dLuiEVkgkkx6m7il.TRNkoAuxMRxrmWmxm	Admin	2025-02-13 11:47:54.60513
+memberone@allmembers.com	$2a$10$axVkI2YaJWHsO6ZowODvauj2/F0SQJozz1QK91mHKCq/rcyTBW0ga	Member	2025-02-13 11:55:42.605248
 \.
 
 
