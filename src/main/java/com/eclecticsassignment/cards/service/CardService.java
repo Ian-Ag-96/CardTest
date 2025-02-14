@@ -16,12 +16,20 @@ public class CardService {
         this.cardRepository = cardRepository;
     }
 
-    public Card insertCard(Card card) {
+    public Card saveCard(Card card) {
         return cardRepository.save(card);
     }
     
     public Card getCardByName(String name) {
     	return cardRepository.getCardByName(name);
+    }
+    
+    public void updateCardName(String oldCardName, String newCardName) {
+    	cardRepository.updateCardName(oldCardName, newCardName);
+    }
+    
+    public void deleteCard(String cardName) {
+    	cardRepository.deleteCard(cardName);
     }
 
     public Optional<Card> updateCard(String name, Card cardDetails) {

@@ -17,6 +17,7 @@ import com.eclecticsassignment.cards.entity.Card;
 import com.eclecticsassignment.cards.entity.User;
 import com.eclecticsassignment.cards.model.CardModel;
 import com.eclecticsassignment.cards.model.UpdateCardNameModel;
+import com.eclecticsassignment.cards.repository.CardRepository;
 import com.eclecticsassignment.cards.repository.UserRepository;
 import com.eclecticsassignment.cards.service.CardService;
 
@@ -93,6 +94,7 @@ public class CardController {
     		log.info("An error occurred. Error: {}", e.getMessage());
     		res.put("status", "1010");
             res.put("message", "An error ocurred.");
+            res.put("cause", e.getMessage());
             e.printStackTrace();
             return ResponseEntity.ok().body(res);
     	}
@@ -128,6 +130,7 @@ public class CardController {
     		log.info("An error occurred. Error: {}", e.getMessage());
     		res.put("status", "1010");
             res.put("message", "Authentication failed.");
+            res.put("cause", e.getMessage());
             e.printStackTrace();
             return ResponseEntity.ok().body(res);
     		
@@ -135,6 +138,7 @@ public class CardController {
     		log.info("An error occurred. Error: {}", e.getMessage());
     		res.put("status", "1010");
             res.put("message", "An error ocurred.");
+            res.put("cause", e.getMessage());
             e.printStackTrace();
             return ResponseEntity.ok().body(res);
     	}
@@ -161,6 +165,7 @@ public class CardController {
     		log.info("An error occurred. Error: {}", e.getMessage());
     		res.put("status", "1010");
             res.put("message", "An error ocurred.");
+            res.put("cause", e.getMessage());
             e.printStackTrace();
             return ResponseEntity.ok().body(res);
     	}
@@ -175,6 +180,12 @@ public class CardController {
     		if(cardName.isEmpty() || cardName == null) {
     			res.put("status", "1010");
                 res.put("message", "Card Name cannot be null or empty.");
+                return ResponseEntity.ok().body(res);
+    		}
+    		
+    		if(cardService.getCardByName(cardName) != null) {
+    			res.put("status", "1010");
+                res.put("message", "Card with name " + cardName + " already exists.");
                 return ResponseEntity.ok().body(res);
     		}
     		
@@ -198,6 +209,8 @@ public class CardController {
     		newCard.setDescription(cardDescription);
     		newCard.setCreator(username);
     		
+    		cardService.saveCard(newCard);
+    		
     		HttpHeaders headers = new HttpHeaders();
 			headers.setContentType(MediaType.APPLICATION_JSON);
             
@@ -211,6 +224,7 @@ public class CardController {
     		log.info("An error occurred. Error: {}", e.getMessage());
     		res.put("status", "1010");
             res.put("message", "An error ocurred.");
+            res.put("cause", e.getMessage());
             e.printStackTrace();
             return ResponseEntity.ok().body(res);
     	}
@@ -221,45 +235,180 @@ public class CardController {
     	Map<String, Object> res = new HashMap<>();
     	try {
     		String currentCardName = updateCardNameModel.getOldCardName();
-    		Card existingCard = cardService.getCardByName(currentCardName);
     		
-    		//implement logic for updating card name
-    		return ResponseEntity.ok().body(res);
+    		if(currentCardName.isEmpty() || currentCardName == null) {
+    			res.put("status", "1010");
+                res.put("message", "Old Card Name cannot be null or empty.");
+                return ResponseEntity.ok().body(res);
+    		}
+    		
+    		String newCardName = updateCardNameModel.getNewCardName();
+    		
+    		if(newCardName.isEmpty() || newCardName == null) {
+    			res.put("status", "1010");
+                res.put("message", "Old Card Name cannot be null or empty.");
+                return ResponseEntity.ok().body(res);
+    		}
+    		
+    		if(currentCardName.equals(newCardName)) {
+    			res.put("status", "1010");
+                res.put("message", "Old Card Name is the same as New Card Name.");
+                return ResponseEntity.ok().body(res);
+    		}
+    		
+    		Card currentCard = cardService.getCardByName(currentCardName);
+    		
+    		if(currentCard != null) {
+    			String creator = JwtUtil.extractUsername(JwtUtil.getTokenFromRequest(request));
+    			User user = userRepository.getUserByEmail(creator);
+    			if(currentCard.getCreator().equals(creator) || user.getRole().equals("Admin")) {
+    				cardService.updateCardName(currentCardName, newCardName);
+        			res.put("status", "1001");
+                    res.put("message", "Card updated successfully.");
+                    
+                    Card newCard = cardService.getCardByName(newCardName);
+                    res.put("card", newCard);
+                    
+                    HttpHeaders headers = new HttpHeaders();
+        			headers.setContentType(MediaType.APPLICATION_JSON);
+
+        			return ResponseEntity.ok().headers(headers).body(res);
+        			
+    			} else {
+    				res.put("status", "1010");
+                    res.put("message", "The user is not an admin nor the card creator. They cannot update the card.");
+                    return ResponseEntity.ok().body(res);
+    			}
+    		} else {
+    			res.put("status", "1010");
+                res.put("message", "Card with name " + currentCardName + " does not exist.");
+                return ResponseEntity.ok().body(res);
+    		}
     	} catch (Exception e) {
     		log.info("An error occurred. Error: {}", e.getMessage());
     		res.put("status", "1010");
             res.put("message", "An error ocurred.");
+            res.put("cause", e.getMessage());
             e.printStackTrace();
             return ResponseEntity.ok().body(res);
     	}
     }
     
     @PostMapping("/updateCardDetails")
-    public Map<String, String> updateCard(@RequestBody CardModel cardModel) {
-        Card card = new Card();
-        return Map.of("message", "Card updated successfully.");
+    public ResponseEntity<?> updateCardDetails(@RequestBody Map<String, String> cardModel) {
+    	Map<String, Object> res = new HashMap<>();
+    	try {
+    		String cardName = cardModel.get("name");
+    		
+    		if(cardName.isEmpty() || cardName == null) {
+    			res.put("status", "1010");
+                res.put("message", "Card Name cannot be null or empty.");
+                return ResponseEntity.ok().body(res);
+    		}
+    		
+    		Card cardForUpdate = cardService.getCardByName(cardName);
+    		
+    		if(cardService.getCardByName(cardName) == null) {
+    			res.put("status", "1010");
+                res.put("message", "Card with name " + cardName + " does not exist.");
+                return ResponseEntity.ok().body(res);
+    		}
+    		
+    		if(!cardModel.containsKey("color") && !cardModel.containsKey("description") && !cardModel.containsKey("status")) {
+    			res.put("status", "1010");
+                res.put("message", "Both color, status, and description are absent. No updates can be made. Add at least one of these fields to update.");
+                return ResponseEntity.ok().body(res);
+    		}
+    		
+    		String creator = JwtUtil.extractUsername(JwtUtil.getTokenFromRequest(request));
+			User user = userRepository.getUserByEmail(creator);
+			if(!cardForUpdate.getCreator().equals(creator) && !user.getRole().equals("Admin")) {
+				res.put("status", "1010");
+                res.put("message", "The user is not an admin nor the card creator. They cannot update the card.");
+                return ResponseEntity.ok().body(res);
+			}
+    		
+    		String color = cardModel.containsKey("color") ? cardModel.get("color") : null;
+    		String description = cardModel.containsKey("description") ? cardModel.get("description") : null;
+    		String status = cardModel.containsKey("status") ? cardModel.get("status") : null;
+    		
+    		if(color != null) cardForUpdate.setColor(color);
+    		if(description != null) cardForUpdate.setDescription(description);
+    		if(status != null) cardForUpdate.setStatus(status);
+    		
+    		cardService.saveCard(cardForUpdate);
+    		
+    		res.put("status", "1001");
+            res.put("message", "Card updated successfully.");
+            res.put("card", cardForUpdate);
+            
+            HttpHeaders headers = new HttpHeaders();
+			headers.setContentType(MediaType.APPLICATION_JSON);
+
+			return ResponseEntity.ok().headers(headers).body(res);
+    		
+    	} catch (Exception e) {
+    		log.info("An error occurred. Error: {}", e.getMessage());
+    		res.put("status", "1010");
+            res.put("message", "An error ocurred.");
+            res.put("cause", e.getMessage());
+            e.printStackTrace();
+            return ResponseEntity.ok().body(res);
+    	}
+    }
+    
+    @PostMapping("/deleteCard")
+    public ResponseEntity<?> deleteCard(@RequestBody String cardName){
+    	Map<String, Object> res = new HashMap<>();
+    	try {
+    		if(cardName.isEmpty() || cardName == null) {
+    			res.put("status", "1010");
+                res.put("message", "Card Name cannot be null or empty.");
+                return ResponseEntity.ok().body(res);
+    		}
+    		
+    		Card cardForUpdate = cardService.getCardByName(cardName);
+    		
+    		if(cardService.getCardByName(cardName) == null) {
+    			res.put("status", "1010");
+                res.put("message", "Card with name " + cardName + " does not exist.");
+                return ResponseEntity.ok().body(res);
+    		}
+    		
+    		cardService.deleteCard(cardName);
+    		res.put("status", "1001");
+            res.put("message", "Card deleted successfully.");
+            res.put("card", cardForUpdate);
+            
+            HttpHeaders headers = new HttpHeaders();
+			headers.setContentType(MediaType.APPLICATION_JSON);
+
+			return ResponseEntity.ok().headers(headers).body(res);
+    		
+    	} catch (Exception e) {
+    		log.info("An error occurred. Error: {}", e.getMessage());
+    		res.put("status", "1010");
+            res.put("message", "An error ocurred.");
+            res.put("cause", e.getMessage());
+            e.printStackTrace();
+            return ResponseEntity.ok().body(res);
+    	}
     }
     
     @GetMapping("/getAllCards")
-    public ResponseEntity<?> getAllCards() {
-//        String connStatus = DBConn.testConn();
-//        if(connStatus.equals("Success")) {
-//        	return Map.of("status", "Db connection successful.");
-//        } else {
-//        	return Map.of("status", "Db connection failed!");
-//        }
-    	return ResponseEntity.ok().body(null);
-    }
-    
-    @GetMapping("/getCardsPerUser")
-    public ResponseEntity<?> getCardsPerUser() {
-//        String connStatus = DBConn.testConn();
-//        if(connStatus.equals("Success")) {
-//        	return Map.of("status", "Db connection successful.");
-//        } else {
-//        	return Map.of("status", "Db connection failed!");
-//        }
-    	return ResponseEntity.ok().body(null);
+    public ResponseEntity<?> getAllCards(@RequestBody String username) {
+    	Map<String, Object> res = new HashMap<>();
+    	try {
+    		//implement fetch for user type admin or member
+    		return ResponseEntity.ok().body(res);
+    	} catch (Exception e) {
+    		log.info("An error occurred. Error: {}", e.getMessage());
+    		res.put("status", "1010");
+            res.put("message", "An error ocurred.");
+            res.put("cause", e.getMessage());
+            e.printStackTrace();
+            return ResponseEntity.ok().body(res);
+    	}
     }
     
     @GetMapping("/getSingleCard")
