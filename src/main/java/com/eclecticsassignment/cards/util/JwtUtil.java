@@ -1,4 +1,4 @@
-package com.eclecticsassignment.cards.config;
+package com.eclecticsassignment.cards.util;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -6,23 +6,27 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.NoArgsConstructor;
 
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import java.security.Key;
 import java.util.Date;
 import java.util.function.Function;
 
+@NoArgsConstructor
+@Component
 public class JwtUtil {
 
-    private static final String SECRET_KEY = "mySuperSecretKeyForJWTGeneration12345"; // Should be stored securely
+    private final String SECRET_KEY = "mySuperSecretKeyForJWTGeneration12345"; // Should be stored securely
 
-    private static Key getSigningKey() {
+    private Key getSigningKey() {
         return Keys.hmacShaKeyFor(SECRET_KEY.getBytes());
     }
     
-    public static String getTokenFromRequest(HttpServletRequest request) {
+    public String getTokenFromRequest(HttpServletRequest request) {
         String authorizationHeader = request.getHeader("Authorization");
 
         if (StringUtils.hasText(authorizationHeader) && authorizationHeader.startsWith("Bearer ")) {
@@ -31,7 +35,7 @@ public class JwtUtil {
         return null;  // Return null if no valid token is found
     }
 
-    public static String generateToken(UserDetails userDetails) {
+    public String generateToken(UserDetails userDetails) {
         return Jwts.builder()
                 .setSubject(userDetails.getUsername())
                 .claim("role", userDetails.getAuthorities().toString())
@@ -41,16 +45,16 @@ public class JwtUtil {
                 .compact();
     }
 
-    public static String extractUsername(String token) {
+    public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
     }
 
-    public static <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
+    public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
         final Claims claims = extractAllClaims(token);
         return claimsResolver.apply(claims);
     }
 
-    private static Claims extractAllClaims(String token) {
+    private Claims extractAllClaims(String token) {
         JwtParser parser = Jwts.parser()  // Or use Jwts.parserBuilder()
                 .setSigningKey(getSigningKey())  // Set the signing key
                 .build();  // Build the JwtParser
@@ -59,12 +63,12 @@ public class JwtUtil {
         return parser.parseClaimsJws(token).getBody();
     }
 
-    public static boolean isTokenValid(String token, UserDetails userDetails) {
+    public boolean isTokenValid(String token, UserDetails userDetails) {
         final String username = extractUsername(token);
         return username.equals(userDetails.getUsername()) && !isTokenExpired(token);
     }
 
-    private static boolean isTokenExpired(String token) {
+    boolean isTokenExpired(String token) {
         return extractClaim(token, Claims::getExpiration).before(new Date());
     }
 }

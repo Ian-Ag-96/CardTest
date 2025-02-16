@@ -31,9 +31,26 @@ public class Card {
     @Column(name = "is_active")
     private char isActive;
     
-    public static boolean isValidHexColor(String input) {
+    public static boolean isValidHexColor(String color) {
         String regex = "#[a-fA-F0-9]{6}";
-        return input != null && input.matches(regex);
+        return color != null && color.matches(regex);
+    }
+    
+    public static boolean isValidStatus(String status) {
+    	return status.equals("To Do") || status.equals("In Progress") || status.equals("Done");
+    }
+    
+    @Override
+    public String toString() {
+        return "Card{" +
+               "name='" + name + '\'' +
+               ", description='" + description + '\'' +
+               ", color='" + color + '\'' +
+               ", status='" + status + '\'' +
+               ", dateCreated=" + dateCreated +
+               ", creator='" + creator + '\'' +
+               ", isActive=" + isActive +
+               '}';
     }
 }
 

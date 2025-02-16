@@ -11,13 +11,21 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import com.eclecticsassignment.cards.filter.JwtAuthenticationFilter;
+import com.eclecticsassignment.cards.service.CustomUserDetailsService;
+import com.eclecticsassignment.cards.util.JwtUtil;
+
 @Configuration
 public class SecurityConfig {
 
     private final CustomUserDetailsService userDetailsService;
+    //private final JwtUtil jwtUtil;
 
-    public SecurityConfig(CustomUserDetailsService userDetailsService) {
+    public SecurityConfig(CustomUserDetailsService userDetailsService
+    		//, JwtUtil jwtUtil
+    		) {
         this.userDetailsService = userDetailsService;
+        //this.jwtUtil = jwtUtil;
     }
 
     @Bean
@@ -30,7 +38,7 @@ public class SecurityConfig {
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .addFilterBefore(new JwtAuthenticationFilter(userDetailsService), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new JwtAuthenticationFilter(userDetailsService, jwtUtil()), UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 
@@ -42,6 +50,11 @@ public class SecurityConfig {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+    
+    @Bean
+    public JwtUtil jwtUtil() {
+    	return new JwtUtil();
     }
 }
 

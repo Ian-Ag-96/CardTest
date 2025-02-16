@@ -1,4 +1,3 @@
---
 -- PostgreSQL database dump
 --
 
@@ -36,7 +35,6 @@ CREATE TABLE public.cards (
     CONSTRAINT status_check CHECK (((status)::text = ANY (ARRAY[('To Do'::character varying)::text, ('In Progress'::character varying)::text, ('Done'::character varying)::text])))
 );
 
-
 ALTER TABLE public.cards OWNER TO postgres;
 
 --
@@ -51,7 +49,6 @@ CREATE TABLE public.users (
     CONSTRAINT users_role_check CHECK (((role)::text = ANY (ARRAY[('Member'::character varying)::text, ('Admin'::character varying)::text])))
 );
 
-
 ALTER TABLE public.users OWNER TO postgres;
 
 --
@@ -60,7 +57,6 @@ ALTER TABLE public.users OWNER TO postgres;
 
 COPY public.cards (name, description, color, status, date_created, creator, is_active) FROM stdin;
 \.
-
 
 --
 -- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: postgres
@@ -71,14 +67,12 @@ adminone@administrators.com	$2a$10$5M44l1L2MPnM1bP7bH3dLuiEVkgkkx6m7il.TRNkoAuxM
 memberone@allmembers.com	$2a$10$axVkI2YaJWHsO6ZowODvauj2/F0SQJozz1QK91mHKCq/rcyTBW0ga	Member	2025-02-13 11:55:42.605248
 \.
 
-
 --
 -- Name: cards cards_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.cards
     ADD CONSTRAINT cards_pkey PRIMARY KEY (name);
-
 
 --
 -- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
@@ -87,8 +81,6 @@ ALTER TABLE ONLY public.cards
 ALTER TABLE ONLY public.users
     ADD CONSTRAINT users_pkey PRIMARY KEY (email);
 
-
 --
 -- PostgreSQL database dump complete
 --
-
