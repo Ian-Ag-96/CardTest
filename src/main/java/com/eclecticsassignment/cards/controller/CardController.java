@@ -41,6 +41,7 @@ public class CardController {
     private final CardService cardService;
     private final JwtUtil jwtUtil;
 
+
     public CardController(UserRepository userRepository,
                           PasswordEncoder passwordEncoder,
                           AuthenticationManager authenticationManager,
@@ -90,7 +91,7 @@ public class CardController {
     		res.put("status", "1010");
             res.put("message", "An error ocurred.");
             res.put("cause", e.getMessage());
-            e.printStackTrace();
+//            e.printStackTrace();
             return ResponseEntity.ok().body(res);
     	}
     }
@@ -102,7 +103,7 @@ public class CardController {
     	Map<String, Object> res = new HashMap<>();
     	try {
     		String email = userModel.getEmail();
-    		if(email.isEmpty() || email == null) {
+    		if(email == null || email.isEmpty()) {
     			log.info("Email parameter cannot be empty or missing.");
         		res.put("status", "1010");
                 res.put("message", "Email parameter cannot be empty or missing.");
@@ -110,7 +111,7 @@ public class CardController {
     		}
     		
     		String password = userModel.getPassword();
-    		if(password.isEmpty() || password == null) {
+    		if(password == null || password.isEmpty()) {
     			log.info("Password parameter cannot be empty or missing.");
         		res.put("status", "1010");
                 res.put("message", "Password parameter cannot be empty or missing.");
@@ -118,7 +119,7 @@ public class CardController {
     		}
     		
     		String role = userModel.getRole();
-    		if(role.isEmpty() || role == null) {
+    		if(role == null || role.isEmpty()) {
     			log.info("Role parameter cannot be empty or missing.");
         		res.put("status", "1010");
                 res.put("message", "Role parameter cannot be empty or missing.");
@@ -177,7 +178,7 @@ public class CardController {
     		res.put("status", "1010");
             res.put("message", "An error ocurred.");
             res.put("cause", e.getMessage());
-            e.printStackTrace();
+//            e.printStackTrace();
             return ResponseEntity.ok().body(res);
     	}
     }
@@ -189,7 +190,7 @@ public class CardController {
     	Map<String, Object> res = new HashMap<>();
     	try {
     		String email = credentials.get("email");
-    		if(email.isEmpty() || email == null) {
+    		if(email == null || email.isEmpty()) {
     			log.info("Email parameter cannot be empty or missing.");
         		res.put("status", "1010");
                 res.put("message", "Email parameter cannot be empty or missing.");
@@ -197,7 +198,7 @@ public class CardController {
     		}
     		
             String password = credentials.get("password");
-            if(password.isEmpty() || password == null) {
+            if(password == null || password.isEmpty()) {
     			log.info("Password parameter cannot be empty or missing.");
         		res.put("status", "1010");
                 res.put("message", "Password parameter cannot be empty or missing.");
@@ -229,21 +230,13 @@ public class CardController {
 			headers.setContentType(MediaType.APPLICATION_JSON);
 
 			return ResponseEntity.ok().headers(headers).body(res);
-            
-    	} catch (AuthenticationException e) {
-    		log.info("An error occurred. Error: {}", e.getMessage());
-    		res.put("status", "1010");
-            res.put("message", "Authentication failed.");
-            res.put("cause", e.getMessage());
-            e.printStackTrace();
-            return ResponseEntity.ok().body(res);
     		
     	} catch (Exception e) {
     		log.info("An error occurred. Error: {}", e.getMessage());
     		res.put("status", "1010");
-            res.put("message", "An error ocurred.");
+            res.put("message", "An error occurred. Error: " + e.getMessage());
             res.put("cause", e.getMessage());
-            e.printStackTrace();
+            //e.printStackTrace();
             return ResponseEntity.ok().body(res);
     	}
     }
@@ -274,7 +267,7 @@ public class CardController {
     		res.put("status", "1010");
             res.put("message", "An error ocurred.");
             res.put("cause", e.getMessage());
-            e.printStackTrace();
+//            e.printStackTrace();
             return ResponseEntity.ok().body(res);
     	}
     }
@@ -287,7 +280,7 @@ public class CardController {
     	try {
     		String cardName = cardModel.getName();
     		
-    		if(cardName.isEmpty() || cardName == null) {
+    		if(cardName == null || cardName.isEmpty()) {
     			log.info("Card Name cannot be null or empty.");
     			res.put("status", "1010");
                 res.put("message", "Card Name cannot be null or empty.");
@@ -326,9 +319,7 @@ public class CardController {
     		
     		log.info("Card details: " + newCard.toString());
     		
-    		cardService.insertCard(newCard);
-    		
-    		Card createdCard = cardService.getCardByName(cardName);
+    		Card createdCard = cardService.insertCard(newCard);
     		
     		HttpHeaders headers = new HttpHeaders();
 			headers.setContentType(MediaType.APPLICATION_JSON);
@@ -345,7 +336,7 @@ public class CardController {
     		res.put("status", "1010");
             res.put("message", "An error ocurred.");
             res.put("cause", e.getMessage());
-            e.printStackTrace();
+//            e.printStackTrace();
             return ResponseEntity.ok().body(res);
     	}
     }
@@ -358,7 +349,7 @@ public class CardController {
     	try {
     		String currentCardName = updateCardNameModel.getOldCardName();
     		
-    		if(currentCardName.isEmpty() || currentCardName == null) {
+    		if(currentCardName == null || currentCardName.isEmpty()) {
     			log.info("Old Card Name cannot be null or empty.");
     			res.put("status", "1010");
                 res.put("message", "Old Card Name cannot be null or empty.");
@@ -367,7 +358,7 @@ public class CardController {
     		
     		String newCardName = updateCardNameModel.getNewCardName();
     		
-    		if(newCardName.isEmpty() || newCardName == null) {
+    		if(newCardName == null || newCardName.isEmpty()) {
     			log.info("New Card Name cannot be null or empty.");
     			res.put("status", "1010");
                 res.put("message", "New Card Name cannot be null or empty.");
@@ -428,7 +419,7 @@ public class CardController {
     		res.put("status", "1010");
             res.put("message", "An error ocurred.");
             res.put("cause", e.getMessage());
-            e.printStackTrace();
+//            e.printStackTrace();
             return ResponseEntity.ok().body(res);
     	}
     }
@@ -449,7 +440,7 @@ public class CardController {
     		
     		String cardName = cardModel.get("name");
     		
-    		if(cardName.isEmpty() || cardName == null) {
+    		if(cardName == null || cardName.isEmpty()) {
     			log.info("Card Name cannot be null or empty.");
     			res.put("status", "1010");
                 res.put("message", "Card Name cannot be null or empty.");
@@ -502,9 +493,9 @@ public class CardController {
     	} catch (Exception e) {
     		log.info("An error occurred. Error: {}", e.getMessage());
     		res.put("status", "1010");
-            res.put("message", "An error ocurred.");
+            res.put("message", "An error occurred.");
             res.put("cause", e.getMessage());
-            e.printStackTrace();
+//            e.printStackTrace();
             return ResponseEntity.ok().body(res);
     	}
     }
@@ -516,7 +507,7 @@ public class CardController {
     	Map<String, Object> res = new HashMap<>();
     	try {
     		String cardName = data.get("cardName");
-    		if(cardName.isEmpty() || cardName == null) {
+    		if(cardName == null || cardName.isEmpty()) {
     			log.info("Card Name cannot be null or empty.");
     			res.put("status", "1010");
                 res.put("message", "Card Name cannot be null or empty.");
@@ -567,7 +558,7 @@ public class CardController {
     		res.put("status", "1010");
             res.put("message", "An error ocurred.");
             res.put("cause", e.getMessage());
-            e.printStackTrace();
+//            e.printStackTrace();
             return ResponseEntity.ok().body(res);
     	}
     }
@@ -618,7 +609,7 @@ public class CardController {
     		res.put("status", "1010");
             res.put("message", "An error ocurred.");
             res.put("cause", e.getMessage());
-            e.printStackTrace();
+//            e.printStackTrace();
             return ResponseEntity.ok().body(res);
     	}
     }
@@ -640,7 +631,7 @@ public class CardController {
     		
     		String cardName = data.get("cardName");
     		
-    		if(cardName.isEmpty() || cardName == null) {
+    		if(cardName == null || cardName.isEmpty()) {
     			res.put("status", "1010");
                 res.put("message", "Card Name cannot be null or empty.");
                 return ResponseEntity.ok().body(res);
@@ -679,7 +670,7 @@ public class CardController {
     		res.put("status", "1010");
             res.put("message", "An error ocurred.");
             res.put("cause", e.getMessage());
-            e.printStackTrace();
+//            e.printStackTrace();
             return ResponseEntity.ok().body(res);
     	}
     }

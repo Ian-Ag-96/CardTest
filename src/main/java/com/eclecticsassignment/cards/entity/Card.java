@@ -8,6 +8,8 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "cards")
 @AllArgsConstructor
@@ -23,6 +25,7 @@ public class Card {
     private String color;
     private String status;
 
+    @JsonIgnore
     @Column(name = "date_created", updatable = false, insertable = false)
     private LocalDateTime dateCreated;
 

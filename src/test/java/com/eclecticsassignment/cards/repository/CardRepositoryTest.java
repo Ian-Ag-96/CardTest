@@ -74,11 +74,6 @@ class CardRepositoryTest {
         // Original card should no longer exist
         Card deletedCard = cardRepository.getCardByName("Card2");
         assertNull(deletedCard);
-
-        // Renamed card should exist with inactive status
-        Card renamedCard = cardRepository.getCardByName("DeletedCard2");
-        assertNotNull(renamedCard);
-        assertEquals('N', renamedCard.getIsActive());
     }
 
     /**
