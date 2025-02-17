@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
 class UserRepositoryTest {
@@ -15,15 +15,24 @@ class UserRepositoryTest {
 
     @Test
     void testGetUserByEmail() {
-        User user = new User();
-        user.setEmail("test@example.com");
-        user.setPassword("password");
-        user.setRole("USER");
+        String email = "test@example.com";
+        User user = new User(email, "password123", "Member");
         userRepository.save(user);
 
-        User fetchedUser = userRepository.getUserByEmail("test@example.com");
+        User result = userRepository.getUserByEmail(email);
 
-        assertNotNull(fetchedUser);
-        assertEquals("test@example.com", fetchedUser.getEmail());
+        // Assert
+        assertThat(result).isNotNull();
+        assertThat(result.getEmail()).isEqualTo(email);
+        assertThat(result.getRole()).isEqualTo("Member");
+        // Purpose: This test verifies that the `getUserByEmail` query correctly retrieves a user by email.
+    }
+
+    @Test
+    void testGetUserByEmail_NotFound() {
+        User result = userRepository.getUserByEmail("nonexistent@example.com");
+
+        assertThat(result).isNull();
+        // Purpose: This test verifies that the `getUserByEmail` query returns null when no user with the given email exists.
     }
 }

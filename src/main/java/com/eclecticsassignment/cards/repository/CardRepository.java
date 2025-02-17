@@ -25,7 +25,6 @@ public interface CardRepository extends JpaRepository<Card, String> {
 	@Query(value = "UPDATE cards SET is_active = 'N', name =:deletedCardName WHERE name = :cardName", nativeQuery = true)
     int deleteCard(@Param("cardName") String cardName, @Param("deletedCardName") String deletedCardName);
 	
-	//Add allowance for sorting by name, color, status, date of creation
 	@Query(value = "SELECT * FROM cards WHERE is_active = 'Y' LIMIT 10", nativeQuery = true)
     List<Card> getAllCards();
 	

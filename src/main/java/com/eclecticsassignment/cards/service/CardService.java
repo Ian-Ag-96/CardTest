@@ -7,9 +7,12 @@ import com.eclecticsassignment.cards.repository.CardRepository;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.sql.DataSource;
 
@@ -45,6 +48,84 @@ public class CardService {
         }
     }
     
+    public List<Card> getAllCardsWithFilters(Map<String, Boolean> sortFilters) throws SQLException, Exception{
+    	StringBuilder filterBuilder = new StringBuilder();
+    	filterBuilder.append(sortFilters.getOrDefault("name", false) ? "name": "");
+    	filterBuilder.append(sortFilters.getOrDefault("color", false) ? filterBuilder.isEmpty() ? "color": ", color" : "");
+    	filterBuilder.append(sortFilters.getOrDefault("status", false) ? filterBuilder.isEmpty() ? "status": ", status" : "");
+    	filterBuilder.append(sortFilters.getOrDefault("date_created", false) ? filterBuilder.isEmpty() ? "date_created": ", date_created" : "");
+    	
+    	
+    	String filters = filterBuilder.toString();
+    	String getSql = "SELECT * FROM cards WHERE is_active = 'Y'" +
+                (filters.isEmpty() ? "" : " ORDER BY " + filters) +
+                " LIMIT 10";
+    	
+    	List<Card> cards = new ArrayList<>();
+        try (Connection conn = dataSource.getConnection();
+           	 PreparedStatement stmt = conn.prepareStatement(getSql);
+        	 ResultSet res = stmt.executeQuery()){
+           	 
+           	while (res.next()) {
+                Card card = new Card();
+                card.setName(res.getString("name"));
+                card.setDescription(res.getString("description"));
+                card.setColor(res.getString("color"));
+                card.setStatus(res.getString("status"));
+                card.setDateCreated(res.getTimestamp("date_created").toLocalDateTime());
+                card.setCreator(res.getString("creator"));
+                card.setIsActive(res.getString("is_active").charAt(0));
+
+                cards.add(card);
+            }
+           	return cards;
+       } catch (SQLException e) {
+       		throw new SQLException("Error: " + e.getMessage());
+       } catch (Exception e) {
+       		throw new Exception("Error: " + e.getMessage());
+       }
+    }
+    
+    public List<Card> getMemberCardsWithFilters(Map<String, Boolean> sortFilters, String creator) throws SQLException, Exception{
+    	StringBuilder filterBuilder = new StringBuilder();
+    	filterBuilder.append(sortFilters.getOrDefault("name", false) ? "name": "");
+    	filterBuilder.append(sortFilters.getOrDefault("color", false) ? filterBuilder.isEmpty() ? "color": ", color" : "");
+    	filterBuilder.append(sortFilters.getOrDefault("status", false) ? filterBuilder.isEmpty() ? "status": ", status" : "");
+    	filterBuilder.append(sortFilters.getOrDefault("date_created", false) ? filterBuilder.isEmpty() ? "date_created": ", date_created" : "");
+    	
+    	
+    	String filters = filterBuilder.toString();
+    	String getSql = "SELECT * FROM cards WHERE is_active = 'Y' AND creator = ?" +
+                (filters.isEmpty() ? "" : " ORDER BY " + filters) +
+                " LIMIT 10";
+    	
+    	List<Card> cards = new ArrayList<>();
+        try (Connection conn = dataSource.getConnection();
+           	 PreparedStatement stmt = conn.prepareStatement(getSql)){
+           	 
+        	stmt.setString(1, creator);
+        	ResultSet res = stmt.executeQuery();
+        	
+           	while (res.next()) {
+                Card card = new Card();
+                card.setName(res.getString("name"));
+                card.setDescription(res.getString("description"));
+                card.setColor(res.getString("color"));
+                card.setStatus(res.getString("status"));
+                card.setDateCreated(res.getTimestamp("date_created").toLocalDateTime());
+                card.setCreator(res.getString("creator"));
+                card.setIsActive(res.getString("is_active").charAt(0));
+
+                cards.add(card);
+            }
+           	return cards;
+       } catch (SQLException e) {
+       		throw new SQLException("Error: " + e.getMessage());
+       } catch (Exception e) {
+       		throw new Exception("Error: " + e.getMessage());
+       }
+    }
+    
     public Card saveCard(Card card) {
     	return cardRepository.save(card);
     }
@@ -62,11 +143,17 @@ public class CardService {
     	return cardRepository.deleteCard(cardName, deletedCardName);
     }
     
-    public List<Card> getAllCards(){
+    public List<Card> getAllCards(Map<String, Boolean> sortFilters) throws SQLException, Exception{
+    	if(sortFilters.getOrDefault("name", false) || sortFilters.getOrDefault("color", false) || sortFilters.getOrDefault("status", false) || sortFilters.getOrDefault("date_created", false)) {
+    		return getAllCardsWithFilters(sortFilters);
+    	}
     	return cardRepository.getAllCards();
     }
     
-    public List<Card> getAllMemeberCards(String creator){
+    public List<Card> getAllMemeberCards(String creator, Map<String, Boolean> sortFilters) throws SQLException, Exception{
+    	if(sortFilters.getOrDefault("name", false) || sortFilters.getOrDefault("color", false) || sortFilters.getOrDefault("status", false) || sortFilters.getOrDefault("date_created", false)) {
+    		return getMemberCardsWithFilters(sortFilters, creator);
+    	}
     	return cardRepository.getAllMemberCards(creator);
     }
 }

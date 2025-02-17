@@ -52,5 +52,13 @@ public class Card {
                ", isActive=" + isActive +
                '}';
     }
+
+	public Card(String name, String description, String color, String creator) {
+		super();
+		this.name = name;
+		this.description = description;
+		this.color = color;
+		this.creator = creator;
+	}
 }
 
