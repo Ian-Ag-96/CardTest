@@ -25,6 +25,7 @@ public class User {
     private String password;
     private String role;
 
+    @JsonIgnore
     @Column(name = "date_created", updatable = false, insertable = false)
     private LocalDateTime dateCreated;
     

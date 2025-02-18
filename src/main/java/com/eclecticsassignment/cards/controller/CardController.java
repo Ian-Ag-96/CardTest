@@ -158,9 +158,7 @@ public class CardController {
     		newUser.setPassword(passwordEncoder.encode(userModel.getPassword()));
     		newUser.setRole(userModel.getRole());
     		
-            userRepository.save(newUser);
-            
-            User createdUser = userRepository.getUserByEmail(username);
+            User createdUser = userRepository.save(newUser);
             
             HttpHeaders headers = new HttpHeaders();
 			headers.setContentType(MediaType.APPLICATION_JSON);
@@ -469,6 +467,20 @@ public class CardController {
     		String description = cardModel.containsKey("description") ? cardModel.get("description") : null;
     		String status = cardModel.containsKey("status") ? cardModel.get("status") : null;
     		
+    		if(color != null && !Card.isValidHexColor(color)) {
+				log.info("Color has to be of the format #12FF56 (# followed by 6 digits or characters between a-f).");
+				res.put("status", "1010");
+                res.put("message", "Color has to be of the format #12FF56 (# followed by 6 digits or characters between a-f).");
+                return ResponseEntity.ok().body(res);
+			}
+    		
+    		if(status != null && !Card.isValidStatus(status)) {
+				log.info("Status can only be 'To Do', 'In Progress', or 'Done'.");
+				res.put("status", "1010");
+                res.put("message", "Invalid status. Status can only be 'To Do', 'In Progress', or 'Done'.");
+                return ResponseEntity.ok().body(res);
+			}
+    		
     		if(color != null && (Card.isValidHexColor(color) || color.equals(""))) cardForUpdate.setColor(color);
     		if(description != null) cardForUpdate.setDescription(description);
     		if(status != null && Card.isValidStatus(status)) cardForUpdate.setStatus(status);
@@ -587,7 +599,7 @@ public class CardController {
     					cardService.getAllCards(sortFilters)
     				:	cardService.getAllMemeberCards(username, sortFilters);
     		
-    		if(allCards ==  null) {
+    		if(allCards ==  null || allCards.size() < 1) {
     			log.info("No cards found.");
     			res.put("status", "1010");
                 res.put("message", "No cards found.");

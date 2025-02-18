@@ -1,243 +1,41 @@
 services:
-  api-gateway:
-    build: ./api-gateway
+  spring-app:
+    build:
+      context: .
+      dockerfile: Dockerfile.txt
+    container_name: spring-app
     ports:
-      - "8200:8200"
+      - "8081:8081"
     volumes:
-      - ./logs:/app/logs
+      - /d/CardTestLogs:/app/logs
     environment:
-      - IP_WHITELIST
-      - TZ:"Africa/Nairobi"
-
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/card_test
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: root
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
     depends_on:
-      - eureka
-
-    deploy:
-      resources:
-        limits:
-          memory: 250m
-
+      - postgres
     networks:
-      - mchama-docker-network
+      - card-network
 
-    restart: always
-
-  eureka:
-    environment:
-      - EUREKA_PORT
-      - HOST_NAME
-    build: ./eureka
-
+  postgres:
+    image: postgres:latest
+    container_name: postgres
     ports:
-      - "8761:8761"
-
-    volumes:
-      - ./logs:/app/logs
-
-    deploy:
-      resources:
-        limits:
-          memory: 250m
-
-    networks:
-      - mchama-docker-network
-
-    restart: always
-
-  auth-service:
+      - "5432:5432"
     environment:
-      - KEYSTORE_ALIAS
-      - KEYSTORE_PASS
-      - KEYSTORE_NAME
-      - HOST_NAME
-      - DB_DIALECT
-      - DB_URL
-      - DB_PASSWORD
-      - DB_USERNAME
-      - KAFKA_URL
-      - REDIS_PORT
-      - REDIS_HOST
-      - TZ:"Africa/Nairobi"
-    build: ./auth-service
-    ports:
-      - "8082:8082"
-    deploy:
-      resources:
-        limits:
-          memory: 350m
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: card_test
     volumes:
-      - ./logs:/app/logs
-
-    depends_on:
-      - eureka
-
+      - postgres-data:/var/lib/postgresql/data
+      - ./card-test.sql:/docker-entrypoint-initdb.d/card-test.sql
     networks:
-      - mchama-docker-network
+      - card-network
 
-    restart: always
-
-  users-service:
-    environment:
-      - KEYSTORE_ALIAS
-      - KEYSTORE_PASS
-      - KEYSTORE_NAME
-      - HOST_NAME
-      - DB_DIALECT
-      - DB_URL
-      - DB_PASSWORD
-      - DB_USERNAME
-      - KAFKA_URL
-      - REDIS_PORT
-      - REDIS_HOST
-      - TZ:"Africa/Nairobi"
-
-    build: ./users-service
-    ports:
-      - "7602:7602"
-    deploy:
-      resources:
-        limits:
-          memory: 350m
-    volumes:
-      - ./logs:/app/logs
-    depends_on:
-      - eureka
-    networks:
-      - mchama-docker-network
-
-    restart: always
-
-  kyc:
-    environment:
-      - KEYSTORE_ALIAS
-      - KEYSTORE_PASS
-      - KEYSTORE_NAME
-      - KAFKA_URL
-      - REDIS_PORT
-      - REDIS_HOST
-      - DB_DIALECT
-      - DB_URL
-      - DB_PASSWORD
-      - DB_USERNAME
-      - TZ:"Africa/Nairobi"
-
-    build: ./kyc
-    ports:
-      - "8083:8083"
-
-    deploy:
-      resources:
-        limits:
-          memory: 100000m
-    volumes:
-      - ./logs:/app/logs
-      - ./chama_files/group:/app/chama_files/group
-      - ./chama_files/official:/app/chama_files/official
-
-    depends_on:
-      - eureka
-      - auth-service
-
-    networks:
-      - mchama-docker-network
-
-    restart: always
-
-  payments:
-    environment:
-      - HOST_NAME
-      - EUREKA_IP_ADDRESS
-      - DCB_ESB
-      - KEYSTORE_ALIAS
-      - KEYSTORE_PASS
-      - KEYSTORE_NAME
-      - KAFKA_URL
-      - REDIS_PORT
-      - REDIS_HOST
-      - DB_DIALECT
-      - DB_URL
-      - DB_PASSWORD
-      - DB_USERNAME
-      - GATEWAY_URL
-      - TZ:"Africa/Nairobi"
-
-    build: ./payments
-    ports:
-      - "8090:8090"
-    volumes:
-      - ./logs:/app/logs
-    depends_on:
-      - eureka
-      - auth-service
-
-    networks:
-      - mchama-docker-network
-
-    restart: always
-
-  notifications:
-    environment:
-      - EMAIL_SEND_FROM
-      - MAIL_PASSWORD
-      - MAIL_USERNAME
-      - MAIL_PORT
-      - MAIL_HOST
-      - KAFKA_URL
-      - DB_DIALECT
-      - DB_URL
-      - DB_PASSWORD
-      - DB_USERNAME
-      - TZ:"Africa/Nairobi"
-
-    build: ./notifications
-    ports:
-      - "8084:8084"
-    deploy:
-      resources:
-        limits:
-          memory: 256m
-    volumes:
-      - ./logs:/app/logs
-    depends_on:
-      - eureka
-    networks:
-      - mchama-docker-network
-
-    restart: always
-
-  files-service:
-    environment:
-      - EMAIL_SEND_FROM
-      - MAIL_PASSWORD
-      - MAIL_USERNAME
-      - MAIL_PORT
-      - MAIL_HOST
-      - KAFKA_URL
-      - DB_DIALECT
-      - DB_URL
-      - DB_PASSWORD
-      - DB_USERNAME
-      - TZ:"Africa/Nairobi"
-
-    build: ./files-service
-    ports:
-      - "8099:8099"
-    deploy:
-      resources:
-        limits:
-          memory: 256m
-    volumes:
-      - ./logs:/app/logs
-      - ./group-documents:/app/group-documents
-      - ./official-documents:/app/official-documents
-    depends_on:
-      - eureka
-    networks:
-      - mchama-docker-network
-
-    restart: always
+volumes:
+  postgres-data:
 
 networks:
-  mchama-docker-network:
-    name: mchama-docker-network
-    external: true
+  card-network:
+    driver: bridge

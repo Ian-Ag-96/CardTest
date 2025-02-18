@@ -63,6 +63,8 @@ COPY public.cards (name, description, color, status, date_created, creator, is_a
 CardOne			To Do	2025-02-15 17:43:57.823473	adminone@administrators.com	Y
 CardTwo_deleted_2025-02-15T18:40:15.781901100	Currently being processed.	#000000	In Progress	2025-02-15 18:09:50.010639	adminone@administrators.com	N
 CardFourMember_deleted_2025-02-15T18:50:32.151308400			To Do	2025-02-15 18:45:25.425532	memberthree@allmembers.com	N
+CardFiveMember	Currently being processed.	#000000	In Progress	2025-02-18 07:45:35.300308	memberfour@allmembers.com	Y
+CardSix_deleted_2025-02-18T08:15:51.281621500	\N	\N	To Do	2025-02-18 07:49:40.96573	memberfour@allmembers.com	N
 \.
 
 
@@ -75,6 +77,8 @@ adminone@administrators.com	$2a$10$5M44l1L2MPnM1bP7bH3dLuiEVkgkkx6m7il.TRNkoAuxM
 memberone@allmembers.com	$2a$10$axVkI2YaJWHsO6ZowODvauj2/F0SQJozz1QK91mHKCq/rcyTBW0ga	Member	2025-02-13 11:55:42.605248
 membertwo@allmembers.com	$2a$10$WcnRRT9J1JNFkqK5TcZdW.ub4kyFt8R4avOOKnYGsZs1a0cLu6pje	Member	2025-02-15 16:26:08.650672
 memberthree@allmembers.com	$2a$10$FX/AYqrAB24jSOuka4u7Z.4L38mYPzHow41dIEK3kjCeDP8zpycTi	Member	2025-02-15 16:45:02.998876
+memberfour@allmembers.com	$2a$10$Hav1/g4gLo87Oupt7AYyUeXxj0pGGJMz9ZC0MOdLZm6yN2L17SDN6	Member	2025-02-18 07:00:48.445192
+memberfive@allmembers.com	$2a$10$fcNUqpVRiigJLYeYbXt7Fud0rKTxNGSB6Bgc4WKjYfEQ32OYvTyGC	Member	2025-02-18 07:24:54.511915
 \.
 
 
