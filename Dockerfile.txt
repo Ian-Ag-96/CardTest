@@ -1,0 +1,14 @@
+# Use an official Tomcat image with Java 17
+FROM tomcat:10.1-jdk17
+
+# Set up environment variables for deployment
+ENV JAVA_OPTS="-Dspring.profiles.active=development"
+
+# Copy the WAR file to the Tomcat webapps directory
+COPY target/cards-0.0.1-SNAPSHOT.war /usr/local/tomcat/webapps/ROOT.war
+
+# Expose the application port
+EXPOSE 8081
+
+# Run Tomcat
+CMD ["catalina.sh", "run"]

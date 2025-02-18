@@ -31,3 +31,15 @@ build/
 
 ### VS Code ###
 .vscode/
+/.gitattributes
+/.gitignore
+/.mvn/
+/README.md
+/card-test.sql
+/docker-compose.yml
+/mvnw
+/mvnw.cmd
+/pom.xml
+/src/
+/start.sh
+/stop.sh
