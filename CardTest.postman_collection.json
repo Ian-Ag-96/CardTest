@@ -2,7 +2,7 @@
 	"info": {
 		"_postman_id": "da8119fd-0ee8-409a-8e9e-6ab0a836b161",
 		"name": "CardTest",
-		"description": "This collection contains requests to allow for:\n\n- User Authentication\n    \n- Card CRUD operations  \n    \n\nThe requests allow for the full functionality of the Card Service.",
+		"description": "This collection contains requests to allow for:\n\n- User Authentication\n    \n- Card CRUD operations\n    \n\nThe requests allow for the full functionality of the Card Service.",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "41252801"
 	},
@@ -25,12 +25,11 @@
 							}
 						},
 						"url": {
-							"raw": "{{baseUrl}}/cards/api/login",
+							"raw": "{{baseUrl}}/api/login",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
-								"cards",
 								"api",
 								"login"
 							]
@@ -53,14 +52,13 @@
 									}
 								},
 								"url": {
-									"raw": "http://localhost:8081/cards/api/login",
+									"raw": "http://localhost:8081/api/login",
 									"protocol": "http",
 									"host": [
 										"localhost"
 									],
 									"port": "8081",
 									"path": [
-										"cards",
 										"api",
 										"login"
 									]
@@ -133,12 +131,11 @@
 									}
 								},
 								"url": {
-									"raw": "{{baseUrl}}/cards/api/login",
+									"raw": "{{baseUrl}}/api/login",
 									"host": [
 										"{{baseUrl}}"
 									],
 									"path": [
-										"cards",
 										"api",
 										"login"
 									]
@@ -211,12 +208,11 @@
 									}
 								},
 								"url": {
-									"raw": "{{baseUrl}}/cards/api/login",
+									"raw": "{{baseUrl}}/api/login",
 									"host": [
 										"{{baseUrl}}"
 									],
 									"path": [
-										"cards",
 										"api",
 										"login"
 									]
@@ -289,12 +285,11 @@
 									}
 								},
 								"url": {
-									"raw": "{{baseUrl}}/cards/api/login",
+									"raw": "{{baseUrl}}/api/login",
 									"host": [
 										"{{baseUrl}}"
 									],
 									"path": [
-										"cards",
 										"api",
 										"login"
 									]
@@ -367,12 +362,11 @@
 									}
 								},
 								"url": {
-									"raw": "{{baseUrl}}/cards/api/login",
+									"raw": "{{baseUrl}}/api/login",
 									"host": [
 										"{{baseUrl}}"
 									],
 									"path": [
-										"cards",
 										"api",
 										"login"
 									]
@@ -445,12 +439,11 @@
 									}
 								},
 								"url": {
-									"raw": "{{baseUrl}}/cards/api/login",
+									"raw": "{{baseUrl}}/api/login",
 									"host": [
 										"{{baseUrl}}"
 									],
 									"path": [
-										"cards",
 										"api",
 										"login"
 									]
@@ -523,12 +516,11 @@
 									}
 								},
 								"url": {
-									"raw": "{{baseUrl}}/cards/api/login",
+									"raw": "{{baseUrl}}/api/login",
 									"host": [
 										"{{baseUrl}}"
 									],
 									"path": [
-										"cards",
 										"api",
 										"login"
 									]
@@ -600,12 +592,11 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/cards/api/testConn",
+							"raw": "{{baseUrl}}/api/testConn",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
-								"cards",
 								"api",
 								"testConn"
 							]
@@ -745,14 +736,13 @@
 									}
 								},
 								"url": {
-									"raw": "http://localhost:8081/cards/api/createUser",
+									"raw": "http://localhost:8081/api/createUser",
 									"protocol": "http",
 									"host": [
 										"localhost"
 									],
 									"port": "8081",
 									"path": [
-										"cards",
 										"api",
 										"createUser"
 									]
@@ -825,12 +815,11 @@
 									}
 								},
 								"url": {
-									"raw": "{{baseUrl}}/cards/api/createUser",
+									"raw": "{{baseUrl}}/api/createUser",
 									"host": [
 										"{{baseUrl}}"
 									],
 									"path": [
-										"cards",
 										"api",
 										"createUser"
 									]
@@ -903,12 +892,11 @@
 									}
 								},
 								"url": {
-									"raw": "{{baseUrl}}/cards/api/createUser",
+									"raw": "{{baseUrl}}/api/createUser",
 									"host": [
 										"{{baseUrl}}"
 									],
 									"path": [
-										"cards",
 										"api",
 										"createUser"
 									]
@@ -981,12 +969,11 @@
 									}
 								},
 								"url": {
-									"raw": "{{baseUrl}}/cards/api/createUser",
+									"raw": "{{baseUrl}}/api/createUser",
 									"host": [
 										"{{baseUrl}}"
 									],
 									"path": [
-										"cards",
 										"api",
 										"createUser"
 									]
@@ -1059,12 +1046,11 @@
 									}
 								},
 								"url": {
-									"raw": "{{baseUrl}}/cards/api/createUser",
+									"raw": "{{baseUrl}}/api/createUser",
 									"host": [
 										"{{baseUrl}}"
 									],
 									"path": [
-										"cards",
 										"api",
 										"createUser"
 									]
@@ -1137,12 +1123,11 @@
 									}
 								},
 								"url": {
-									"raw": "{{baseUrl}}/cards/api/createUser",
+									"raw": "{{baseUrl}}/api/createUser",
 									"host": [
 										"{{baseUrl}}"
 									],
 									"path": [
-										"cards",
 										"api",
 										"createUser"
 									]
@@ -1215,12 +1200,11 @@
 									}
 								},
 								"url": {
-									"raw": "{{baseUrl}}/cards/api/createUser",
+									"raw": "{{baseUrl}}/api/createUser",
 									"host": [
 										"{{baseUrl}}"
 									],
 									"path": [
-										"cards",
 										"api",
 										"createUser"
 									]
@@ -1296,12 +1280,11 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/cards/api/getCurrentUser",
+							"raw": "{{baseUrl}}/api/getCurrentUser",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
-								"cards",
 								"api",
 								"getCurrentUser"
 							]
@@ -1314,14 +1297,11 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "http://localhost:8081/cards/api/getCurrentUser",
-									"protocol": "http",
+									"raw": "{{baseUrl}}/api/getCurrentUser",
 									"host": [
-										"localhost"
+										"{{baseUrl}}"
 									],
-									"port": "8081",
 									"path": [
-										"cards",
 										"api",
 										"getCurrentUser"
 									]
@@ -1412,12 +1392,11 @@
 							}
 						},
 						"url": {
-							"raw": "{{baseUrl}}/cards/api/createCard",
+							"raw": "{{baseUrl}}/api/createCard",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
-								"cards",
 								"api",
 								"createCard"
 							]
@@ -1440,14 +1419,11 @@
 									}
 								},
 								"url": {
-									"raw": "http://localhost:8081/cards/api/createCard",
-									"protocol": "http",
+									"raw": "{{baseUrl}}/api/createCard",
 									"host": [
-										"localhost"
+										"{{baseUrl}}"
 									],
-									"port": "8081",
 									"path": [
-										"cards",
 										"api",
 										"createCard"
 									]
@@ -1520,12 +1496,11 @@
 									}
 								},
 								"url": {
-									"raw": "{{baseUrl}}/cards/api/createCard",
+									"raw": "{{baseUrl}}/api/createCard",
 									"host": [
 										"{{baseUrl}}"
 									],
 									"path": [
-										"cards",
 										"api",
 										"createCard"
 									]
@@ -1598,12 +1573,11 @@
 									}
 								},
 								"url": {
-									"raw": "{{baseUrl}}/cards/api/createCard",
+									"raw": "{{baseUrl}}/api/createCard",
 									"host": [
 										"{{baseUrl}}"
 									],
 									"path": [
-										"cards",
 										"api",
 										"createCard"
 									]
@@ -1676,12 +1650,11 @@
 									}
 								},
 								"url": {
-									"raw": "{{baseUrl}}/cards/api/createCard",
+									"raw": "{{baseUrl}}/api/createCard",
 									"host": [
 										"{{baseUrl}}"
 									],
 									"path": [
-										"cards",
 										"api",
 										"createCard"
 									]
@@ -1766,12 +1739,11 @@
 							}
 						},
 						"url": {
-							"raw": "{{baseUrl}}/cards/api/updateCardDetails",
+							"raw": "{{baseUrl}}/api/updateCardDetails",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
-								"cards",
 								"api",
 								"updateCardDetails"
 							]
@@ -1794,14 +1766,11 @@
 									}
 								},
 								"url": {
-									"raw": "http://localhost:8081/cards/api/updateCardDetails",
-									"protocol": "http",
+									"raw": "{{baseUrl}}/api/updateCardDetails",
 									"host": [
-										"localhost"
+										"{{baseUrl}}"
 									],
-									"port": "8081",
 									"path": [
-										"cards",
 										"api",
 										"updateCardDetails"
 									]
@@ -1874,12 +1843,11 @@
 									}
 								},
 								"url": {
-									"raw": "{{baseUrl}}/cards/api/updateCardDetails",
+									"raw": "{{baseUrl}}/api/updateCardDetails",
 									"host": [
 										"{{baseUrl}}"
 									],
 									"path": [
-										"cards",
 										"api",
 										"updateCardDetails"
 									]
@@ -1952,12 +1920,11 @@
 									}
 								},
 								"url": {
-									"raw": "{{baseUrl}}/cards/api/updateCardDetails",
+									"raw": "{{baseUrl}}/api/updateCardDetails",
 									"host": [
 										"{{baseUrl}}"
 									],
 									"path": [
-										"cards",
 										"api",
 										"updateCardDetails"
 									]
@@ -2030,12 +1997,11 @@
 									}
 								},
 								"url": {
-									"raw": "{{baseUrl}}/cards/api/updateCardDetails",
+									"raw": "{{baseUrl}}/api/updateCardDetails",
 									"host": [
 										"{{baseUrl}}"
 									],
 									"path": [
-										"cards",
 										"api",
 										"updateCardDetails"
 									]
@@ -2108,12 +2074,11 @@
 									}
 								},
 								"url": {
-									"raw": "{{baseUrl}}/cards/api/updateCardDetails",
+									"raw": "{{baseUrl}}/api/updateCardDetails",
 									"host": [
 										"{{baseUrl}}"
 									],
 									"path": [
-										"cards",
 										"api",
 										"updateCardDetails"
 									]
@@ -2186,12 +2151,11 @@
 									}
 								},
 								"url": {
-									"raw": "{{baseUrl}}/cards/api/updateCardDetails",
+									"raw": "{{baseUrl}}/api/updateCardDetails",
 									"host": [
 										"{{baseUrl}}"
 									],
 									"path": [
-										"cards",
 										"api",
 										"updateCardDetails"
 									]
@@ -2276,12 +2240,11 @@
 							}
 						},
 						"url": {
-							"raw": "{{baseUrl}}/cards/api/updateCardName",
+							"raw": "{{baseUrl}}/api/updateCardName",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
-								"cards",
 								"api",
 								"updateCardName"
 							]
@@ -2304,14 +2267,11 @@
 									}
 								},
 								"url": {
-									"raw": "http://localhost:8081/cards/api/updateCardName",
-									"protocol": "http",
+									"raw": "{{baseUrl}}/api/updateCardName",
 									"host": [
-										"localhost"
+										"{{baseUrl}}"
 									],
-									"port": "8081",
 									"path": [
-										"cards",
 										"api",
 										"updateCardName"
 									]
@@ -2384,12 +2344,11 @@
 									}
 								},
 								"url": {
-									"raw": "{{baseUrl}}/cards/api/updateCardName",
+									"raw": "{{baseUrl}}/api/updateCardName",
 									"host": [
 										"{{baseUrl}}"
 									],
 									"path": [
-										"cards",
 										"api",
 										"updateCardName"
 									]
@@ -2462,12 +2421,11 @@
 									}
 								},
 								"url": {
-									"raw": "{{baseUrl}}/cards/api/updateCardName",
+									"raw": "{{baseUrl}}/api/updateCardName",
 									"host": [
 										"{{baseUrl}}"
 									],
 									"path": [
-										"cards",
 										"api",
 										"updateCardName"
 									]
@@ -2540,12 +2498,11 @@
 									}
 								},
 								"url": {
-									"raw": "{{baseUrl}}/cards/api/updateCardName",
+									"raw": "{{baseUrl}}/api/updateCardName",
 									"host": [
 										"{{baseUrl}}"
 									],
 									"path": [
-										"cards",
 										"api",
 										"updateCardName"
 									]
@@ -2618,12 +2575,11 @@
 									}
 								},
 								"url": {
-									"raw": "{{baseUrl}}/cards/api/updateCardName",
+									"raw": "{{baseUrl}}/api/updateCardName",
 									"host": [
 										"{{baseUrl}}"
 									],
 									"path": [
-										"cards",
 										"api",
 										"updateCardName"
 									]
@@ -2696,12 +2652,11 @@
 									}
 								},
 								"url": {
-									"raw": "{{baseUrl}}/cards/api/updateCardName",
+									"raw": "{{baseUrl}}/api/updateCardName",
 									"host": [
 										"{{baseUrl}}"
 									],
 									"path": [
-										"cards",
 										"api",
 										"updateCardName"
 									]
@@ -2786,12 +2741,11 @@
 							}
 						},
 						"url": {
-							"raw": "{{baseUrl}}/cards/api/deleteCard",
+							"raw": "{{baseUrl}}/api/deleteCard",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
-								"cards",
 								"api",
 								"deleteCard"
 							]
@@ -2814,14 +2768,13 @@
 									}
 								},
 								"url": {
-									"raw": "http://localhost:8081/cards/api/deleteCard",
+									"raw": "http://localhost:8081/api/deleteCard",
 									"protocol": "http",
 									"host": [
 										"localhost"
 									],
 									"port": "8081",
 									"path": [
-										"cards",
 										"api",
 										"deleteCard"
 									]
@@ -2894,12 +2847,11 @@
 									}
 								},
 								"url": {
-									"raw": "{{baseUrl}}/cards/api/deleteCard",
+									"raw": "{{baseUrl}}/api/deleteCard",
 									"host": [
 										"{{baseUrl}}"
 									],
 									"path": [
-										"cards",
 										"api",
 										"deleteCard"
 									]
@@ -2972,12 +2924,11 @@
 									}
 								},
 								"url": {
-									"raw": "{{baseUrl}}/cards/api/deleteCard",
+									"raw": "{{baseUrl}}/api/deleteCard",
 									"host": [
 										"{{baseUrl}}"
 									],
 									"path": [
-										"cards",
 										"api",
 										"deleteCard"
 									]
@@ -3050,12 +3001,11 @@
 									}
 								},
 								"url": {
-									"raw": "{{baseUrl}}/cards/api/deleteCard",
+									"raw": "{{baseUrl}}/api/deleteCard",
 									"host": [
 										"{{baseUrl}}"
 									],
 									"path": [
-										"cards",
 										"api",
 										"deleteCard"
 									]
@@ -3143,12 +3093,11 @@
 							}
 						},
 						"url": {
-							"raw": "{{baseUrl}}/cards/api/getAllCards",
+							"raw": "{{baseUrl}}/api/getAllCards",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
-								"cards",
 								"api",
 								"getAllCards"
 							]
@@ -3171,14 +3120,13 @@
 									}
 								},
 								"url": {
-									"raw": "http://localhost:8081/cards/api/getAllCards",
+									"raw": "http://localhost:8081/api/getAllCards",
 									"protocol": "http",
 									"host": [
 										"localhost"
 									],
 									"port": "8081",
 									"path": [
-										"cards",
 										"api",
 										"getAllCards"
 									]
@@ -3251,12 +3199,11 @@
 									}
 								},
 								"url": {
-									"raw": "{{baseUrl}}/cards/api/getAllCards",
+									"raw": "{{baseUrl}}/api/getAllCards",
 									"host": [
 										"{{baseUrl}}"
 									],
 									"path": [
-										"cards",
 										"api",
 										"getAllCards"
 									]
@@ -3329,12 +3276,11 @@
 									}
 								},
 								"url": {
-									"raw": "{{baseUrl}}/cards/api/getAllCards",
+									"raw": "{{baseUrl}}/api/getAllCards",
 									"host": [
 										"{{baseUrl}}"
 									],
 									"path": [
-										"cards",
 										"api",
 										"getAllCards"
 									]
@@ -3422,12 +3368,11 @@
 							}
 						},
 						"url": {
-							"raw": "{{baseUrl}}/cards/api/getSingleCard",
+							"raw": "{{baseUrl}}/api/getSingleCard",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
-								"cards",
 								"api",
 								"getSingleCard"
 							]
@@ -3450,14 +3395,11 @@
 									}
 								},
 								"url": {
-									"raw": "http://localhost:8081/cards/api/getSingleCard",
-									"protocol": "http",
+									"raw": "{{baseUrl}}/api/getSingleCard",
 									"host": [
-										"localhost"
+										"{{baseUrl}}"
 									],
-									"port": "8081",
 									"path": [
-										"cards",
 										"api",
 										"getSingleCard"
 									]
@@ -3530,12 +3472,11 @@
 									}
 								},
 								"url": {
-									"raw": "{{baseUrl}}/cards/api/getSingleCard",
+									"raw": "{{baseUrl}}/api/getSingleCard",
 									"host": [
 										"{{baseUrl}}"
 									],
 									"path": [
-										"cards",
 										"api",
 										"getSingleCard"
 									]
@@ -3608,12 +3549,11 @@
 									}
 								},
 								"url": {
-									"raw": "{{baseUrl}}/cards/api/getSingleCard",
+									"raw": "{{baseUrl}}/api/getSingleCard",
 									"host": [
 										"{{baseUrl}}"
 									],
 									"path": [
-										"cards",
 										"api",
 										"getSingleCard"
 									]
@@ -3686,12 +3626,11 @@
 									}
 								},
 								"url": {
-									"raw": "{{baseUrl}}/cards/api/getSingleCard",
+									"raw": "{{baseUrl}}/api/getSingleCard",
 									"host": [
 										"{{baseUrl}}"
 									],
 									"path": [
-										"cards",
 										"api",
 										"getSingleCard"
 									]
