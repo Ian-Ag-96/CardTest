@@ -5,7 +5,7 @@ services:
       dockerfile: Dockerfile.txt
     container_name: spring-app
     ports:
-      - "8081:8081"
+      - "8081:8080"
     volumes:
       - /d/CardTestLogs:/app/logs
     environment:
