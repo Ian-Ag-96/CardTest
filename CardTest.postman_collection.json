@@ -17,7 +17,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"email\": \"memberfive@allmembers.com\",\r\n    \"password\": \"member1234\"\r\n}",
+							"raw": "{\r\n    \"email\": \"memberfour@allmembers.com\",\r\n    \"password\": \"member1234\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -52,14 +52,11 @@
 									}
 								},
 								"url": {
-									"raw": "http://localhost:8081/api/login",
-									"protocol": "http",
+									"raw": "{{baseUrl}}api/login",
 									"host": [
-										"localhost"
+										"{{baseUrl}}api"
 									],
-									"port": "8081",
 									"path": [
-										"api",
 										"login"
 									]
 								}
@@ -610,14 +607,11 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "http://localhost:8081/cards/api/testConn",
-									"protocol": "http",
+									"raw": "{{baseUrl}}/api/testConn",
 									"host": [
-										"localhost"
+										"{{baseUrl}}"
 									],
-									"port": "8081",
 									"path": [
-										"cards",
 										"api",
 										"testConn"
 									]
@@ -708,12 +702,11 @@
 							}
 						},
 						"url": {
-							"raw": "{{baseUrl}}/cards/api/createUser",
+							"raw": "{{baseUrl}}/api/createUser",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
-								"cards",
 								"api",
 								"createUser"
 							]
@@ -736,12 +729,10 @@
 									}
 								},
 								"url": {
-									"raw": "http://localhost:8081/api/createUser",
-									"protocol": "http",
+									"raw": "{{baseUrl}}/api/createUser",
 									"host": [
-										"localhost"
+										"{{baseUrl}}"
 									],
-									"port": "8081",
 									"path": [
 										"api",
 										"createUser"
@@ -1384,7 +1375,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"CardSix\"\r\n}",
+							"raw": "{\r\n    \"name\": \"Member Card 2\",\r\n    \"color\": \"#FFFFFF\",\r\n    \"description\": \"A white memeber card\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1731,7 +1722,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"CardFive\",\r\n    \"color\": \"#000000\",\r\n    \"description\": \"Currently being processed.\",\r\n    \"status\": \"In Prog\"\r\n}",
+							"raw": "{\r\n    \"name\": \"AdministratorCard\",\r\n    \"color\": \"#000000\",\r\n    \"description\": \"A card being processed.\",\r\n    \"status\": \"In Progress\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -2212,6 +2203,83 @@
 							],
 							"cookie": [],
 							"body": "{\n    \"message\": \"Card with name CardFive does not exist.\",\n    \"status\": \"1010\"\n}"
+						},
+						{
+							"name": "UpdateCardDetails - Failure - Unauthorized User",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"AdministratorCard\",\r\n    \"color\": \"#000000\",\r\n    \"description\": \"A card being processed.\",\r\n    \"status\": \"In Progress\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/updateCardDetails",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"updateCardDetails"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "0"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 26 Feb 2025 12:37:11 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"The user is not an admin nor the card creator. They cannot update the card.\",\n    \"status\": \"1010\"\n}"
 						}
 					]
 				},
@@ -2232,7 +2300,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"oldCardName\": \"CardFiveMembers\",\r\n    \"newCardName\": \"CardFive\"\r\n}",
+							"raw": "{\r\n    \"oldCardName\": \"AdministratorCard\",\r\n    \"newCardName\": \"AdminCard\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -2713,6 +2781,83 @@
 							],
 							"cookie": [],
 							"body": "{\n    \"message\": \"Card with name CardFiveMembers does not exist.\",\n    \"status\": \"1010\"\n}"
+						},
+						{
+							"name": "UpdateCardName - Failure - Unauthorized User",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"oldCardName\": \"AdministratorCard\",\r\n    \"newCardName\": \"AdminCard\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/updateCardName",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"updateCardName"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "0"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 26 Feb 2025 12:39:09 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"The user is not an admin nor the card creator. They cannot update the card.\",\n    \"status\": \"1010\"\n}"
 						}
 					]
 				},
@@ -2733,7 +2878,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"cardName\": \"CardSix\"\r\n}",
+							"raw": "{\r\n    \"cardName\": \"Member Card 2\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -2768,12 +2913,10 @@
 									}
 								},
 								"url": {
-									"raw": "http://localhost:8081/api/deleteCard",
-									"protocol": "http",
+									"raw": "{{baseUrl}}/api/deleteCard",
 									"host": [
-										"localhost"
+										"{{baseUrl}}"
 									],
-									"port": "8081",
 									"path": [
 										"api",
 										"deleteCard"
@@ -3120,12 +3263,10 @@
 									}
 								},
 								"url": {
-									"raw": "http://localhost:8081/api/getAllCards",
-									"protocol": "http",
+									"raw": "{{baseUrl}}/api/getAllCards",
 									"host": [
-										"localhost"
+										"{{baseUrl}}"
 									],
-									"port": "8081",
 									"path": [
 										"api",
 										"getAllCards"
@@ -3360,7 +3501,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"cardName\": \"CardFiveMember\"\r\n}",
+							"raw": "{\r\n    \"cardName\": \"Member Card\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
