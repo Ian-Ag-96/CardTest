@@ -11,7 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 public class DBConn {
 
     private static final String URL = "jdbc:postgresql://localhost:5432/card_test";
-    private static final String DOCKER_URL = "jdbc:postgresql://postgres:5432/card_test";
+    private static final String DOCKER_URL = "jdbc:postgresql://host.docker.internal:5431/card_test";
     private static final String USER = "postgres";
     private static final String PASSWORD = "root";
 
