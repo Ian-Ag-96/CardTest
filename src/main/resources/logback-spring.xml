@@ -1,0 +1,35 @@
+<configuration>
+    <!-- Console Appender for logs to appear in terminal and Docker Desktop -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- File Appender for logs to be saved to files -->
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>/app/logs/cards.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <!-- Main log file naming pattern -->
+            <fileNamePattern>/app/logs/cards-%d{yyyy-MM-dd}.log</fileNamePattern>
+            
+            <!-- Archived logs naming pattern -->
+            <fileNamePattern>/app/logs/archived/cards-%d{yyyy-MM-dd}-archived.%i.log</fileNamePattern>
+            
+            <!-- Maximum size of a single log file -->
+            <maxFileSize>100MB</maxFileSize>
+            
+            <!-- Keep logs for 30 days -->
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Root Logger: Send logs to both Console and File -->
+    <root level="info">
+        <appender-ref ref="CONSOLE" />
+        <appender-ref ref="FILE" />
+    </root>
+</configuration>

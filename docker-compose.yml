@@ -1,6 +1,6 @@
 services:
   database:
-    image: postgres:17
+    image: postgres:17-alpine
     container_name: card_test_db
     environment:
       POSTGRES_USER: postgres
@@ -23,9 +23,23 @@ services:
       - "8081:8081"
     environment:
       SPRING_PROFILES_ACTIVE: prod
-    command: ["java", "-jar", "/app/app.jar", "--spring.config.location=/app/application-prod.properties"]
+    command: ["java", "-jar", "/app/app.jar"]
     extra_hosts:
       - "host.docker.internal:host-gateway" # Ensures Linux compatibility when using host.docker.internal
 
+  test:
+    image: maven:3.8.5-eclipse-temurin-17-alpine
+    container_name: card_test_tests
+    depends_on:
+      - database
+    volumes:
+      - .:/app # Mount the project directory
+      - maven_cache:/root/.m2 # Cache Maven dependencies
+    working_dir: /app
+    command: ["mvn", "test"]
+    environment:
+      SPRING_PROFILES_ACTIVE: test # Use test profile for testing
+
 volumes:
   db_data:
+  maven_cache:
