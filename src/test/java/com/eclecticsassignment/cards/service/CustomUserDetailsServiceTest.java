@@ -26,6 +26,8 @@ class CustomUserDetailsServiceTest {
         MockitoAnnotations.openMocks(this);
     }
 
+    
+    //Test to retrieve a user that exists using their username
     @Test
     void testLoadUserByUsername_UserExists() {
         String email = "test@example.com";
@@ -43,6 +45,7 @@ class CustomUserDetailsServiceTest {
         verify(userRepository, times(1)).findById(email);
     }
 
+    //Test to show a user is not found when a non-existent username is provided
     @Test
     void testLoadUserByUsername_UserNotFound() {
         String email = "nonexistent@example.com";
