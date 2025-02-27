@@ -23,20 +23,16 @@ class SecurityConfigTest {
     //Tests whether an AuthenticationManager object can be created
     @Test
     void testAuthenticationManagerBean() {
-    	log.info("Authentication manager test begin..........");
         assertNotNull(authenticationManager);
-        log.info("Authentication manager test end..........");
     }
 
     //Tests whether an PasswordEncoder object can be created and is functional
     @Test
     void testPasswordEncoderBean() {
-    	log.info("Password encoder test begin..........");
         String rawPassword = "password";
         String encodedPassword = passwordEncoder.encode(rawPassword);
 
         assertNotNull(encodedPassword);
         assertTrue(passwordEncoder.matches(rawPassword, encodedPassword));
-        log.info("Password encoder test end..........");
     }
 }

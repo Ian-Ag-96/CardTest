@@ -1,9 +1,10 @@
 Prerequisites
-	- Ensure maven is installed
-	- Run mvn clean install -DskipTests -Dspring.datasource.type=none
+	- Ensure maven latest is installed
+	- Ensure java version at least 17 is installed
+	- Run mvn clean install -DskipTests -Dspring.datasource.type=none, or mvn clean install -DskipTests for windows
 	- Ensure docker is installed
 	- Ensure these ports are free: 8081 for the application and 5431 for the postgres database.
 	- Run the command docker-compose up --build to run all services
 	- Run the command docker-compose up database to start only the database
 	- Run the command docker-compose up app to start the application and database without running tests
-	- Run the command docker-compose up tests to run tests
+	- Run the command docker-compose up test to run tests

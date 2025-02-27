@@ -2,7 +2,7 @@
 	"info": {
 		"_postman_id": "da8119fd-0ee8-409a-8e9e-6ab0a836b161",
 		"name": "CardTest",
-		"description": "This collection contains requests to allow for:\n\n- User Authentication\n    \n- Card CRUD operations\n    \n\nThe requests allow for the full functionality of the Card Service.",
+		"description": "This collection contains requests to allow for:\n\n- User Authentication\n    \n- Card CRUD operations\n    \n\nThe requests allow for the full functionality of the Card Service.\n\n# Prerequisites\n\nEnsure at least Java version 17 is installed on the host machine to enable the build process for the jar file.  \nYou may optionally have maven (latest) installed as well.  \nThe application uses port 8081 and the database uses port 5431. Ensure the ports are free and accept tcp connections. If not you will need to modify the application.properties file to reflect the database port you wish to use, the Dockerfile to modify the exposed application port, and the docker-compose.yml file to modify both the database and application ports to the desired ones.  \nEnsure docker is installed on the host machine.  \nEnsure the host machine is connected to the internet.\n\n# Configuration\n\nClone the repository from the command line if git is installed in your system using 'git clone [https://github.com/Ian-Ag-96/CardTest.git'](https://github.com/Ian-Ag-96/CardTest.git') or any other cloning mechanism you may wish to use.  \nNavigate to the directory where the project resides and open the command line/terminal.  \nRun the command 'mvn clean install -DskipTests' if maven is already installed or 'mvnw clean install -DskipTests' - (Windows) or './mvnw clean install -DskipTests' (Linux) if it is not installed. We are skipping tests because we want to only build the jar file. A container called 'card_test_tests' will be created later on for specifically running tests.  \nAfter the jar file has been built successfully, ensure docker is running first then run the command 'docker-compose up --build' to download the necessary files, handle configurations, create all the containers, and start the application, including running tests. This may take some time as maven will have to be installed including its dependencies to handle tests.  \nFor specific cases you may use the following commands:  \n'docker-compose up database' to only start the database and initialize the data  \n'docker-compose up app' to start the application and database without running tests  \n'docker-compose up test' to run the tests only\n\n# Users\n\nThere are preloaded users in the database from the sql file 'card-test.sql':\n\n```\n- Admin user\n    email: 'adminone@administrators.com'\n    password: 'admin1234'\n- Member user\n    email: 'memberfour@allmembers.com'\n    password: 'member1234'\n\n ```\n\n# Documentation\n\nThe documentation can be found on this link: [https://documenter.getpostman.com/view/41252801/2sAYdZvaLy](https://documenter.getpostman.com/view/41252801/2sAYdZvaLy)  \nThe documentation is done using Postman.  \nRequests can be found in the file 'CardTest.postman_collection'\n\n# Extras\n\nAn API, though out of scope, for creating users is also included in the service.",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "41252801"
 	},
@@ -17,7 +17,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"email\": \"memberfour@allmembers.com\",\r\n    \"password\": \"member1234\"\r\n}",
+							"raw": "{\r\n    \"email\": \"adminone@administrators.com\",\r\n    \"password\": \"admin1234\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -52,10 +52,12 @@
 									}
 								},
 								"url": {
-									"raw": "{{baseUrl}}api/login",
+									"raw": "http://localhost:8081api/login",
+									"protocol": "http",
 									"host": [
-										"{{baseUrl}}api"
+										"localhost"
 									],
+									"port": "8081api",
 									"path": [
 										"login"
 									]
@@ -607,10 +609,12 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{baseUrl}}/api/testConn",
+									"raw": "http://localhost:8081/api/testConn",
+									"protocol": "http",
 									"host": [
-										"{{baseUrl}}"
+										"localhost"
 									],
+									"port": "8081",
 									"path": [
 										"api",
 										"testConn"
@@ -729,10 +733,12 @@
 									}
 								},
 								"url": {
-									"raw": "{{baseUrl}}/api/createUser",
+									"raw": "http://localhost:8081/api/createUser",
+									"protocol": "http",
 									"host": [
-										"{{baseUrl}}"
+										"localhost"
 									],
+									"port": "8081",
 									"path": [
 										"api",
 										"createUser"
@@ -1288,10 +1294,12 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{baseUrl}}/api/getCurrentUser",
+									"raw": "http://localhost:8081/api/getCurrentUser",
+									"protocol": "http",
 									"host": [
-										"{{baseUrl}}"
+										"localhost"
 									],
+									"port": "8081",
 									"path": [
 										"api",
 										"getCurrentUser"
@@ -1410,10 +1418,12 @@
 									}
 								},
 								"url": {
-									"raw": "{{baseUrl}}/api/createCard",
+									"raw": "http://localhost:8081/api/createCard",
+									"protocol": "http",
 									"host": [
-										"{{baseUrl}}"
+										"localhost"
 									],
+									"port": "8081",
 									"path": [
 										"api",
 										"createCard"
@@ -1757,10 +1767,12 @@
 									}
 								},
 								"url": {
-									"raw": "{{baseUrl}}/api/updateCardDetails",
+									"raw": "http://localhost:8081/api/updateCardDetails",
+									"protocol": "http",
 									"host": [
-										"{{baseUrl}}"
+										"localhost"
 									],
+									"port": "8081",
 									"path": [
 										"api",
 										"updateCardDetails"
@@ -2335,10 +2347,12 @@
 									}
 								},
 								"url": {
-									"raw": "{{baseUrl}}/api/updateCardName",
+									"raw": "http://localhost:8081/api/updateCardName",
+									"protocol": "http",
 									"host": [
-										"{{baseUrl}}"
+										"localhost"
 									],
+									"port": "8081",
 									"path": [
 										"api",
 										"updateCardName"
@@ -3228,7 +3242,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\": true,\r\n    \"status\": false,\r\n    \"color\": false,\r\n    \"date_created\": false\r\n}",
+							"raw": "{\r\n    \"creator\": true\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
