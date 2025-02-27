@@ -1,41 +1,45 @@
 services:
-  spring-app:
-    build:
-      context: .
-      dockerfile: Dockerfile.txt
-    container_name: spring-app
-    ports:
-      - "8081:8080"
-    volumes:
-      - /d/CardTestLogs:/app/logs
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/card_test
-      SPRING_DATASOURCE_USERNAME: postgres
-      SPRING_DATASOURCE_PASSWORD: root
-      SPRING_JPA_HIBERNATE_DDL_AUTO: update
-    depends_on:
-      - postgres
-    networks:
-      - card-network
-
-  postgres:
-    image: postgres:latest
-    container_name: postgres
-    ports:
-      - "5432:5432"
+  database:
+    image: postgres:17-alpine
+    container_name: card_test_db
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: root
       POSTGRES_DB: card_test
+    ports:
+      - "5431:5432"
     volumes:
-      - postgres-data:/var/lib/postgresql/data
-      - ./card-test.sql:/docker-entrypoint-initdb.d/card-test.sql
-    networks:
-      - card-network
+      - db_data:/var/lib/postgresql/data
+      - ./card-test.sql:/docker-entrypoint-initdb.d/card-test.sql:ro
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: card_test_app
+    depends_on:
+      - database
+    ports:
+      - "8081:8081"
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+    command: ["java", "-jar", "/app/app.jar"]
+    extra_hosts:
+      - "host.docker.internal:host-gateway" # Ensures Linux compatibility when using host.docker.internal
+
+  test:
+    image: maven:3.8.5-eclipse-temurin-17-alpine
+    container_name: card_test_tests
+    depends_on:
+      - database
+    volumes:
+      - .:/app # Mount the project directory
+      - maven_cache:/root/.m2 # Cache Maven dependencies
+    working_dir: /app
+    command: ["mvn", "test"]
+    environment:
+      SPRING_PROFILES_ACTIVE: test # Use test profile for testing
 
 volumes:
-  postgres-data:
-
-networks:
-  card-network:
-    driver: bridge
+  db_data:
+  maven_cache:

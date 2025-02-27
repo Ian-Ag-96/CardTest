@@ -22,6 +22,18 @@ SET default_tablespace = '';
 SET default_table_access_method = heap;
 
 --
+-- Create database if not exists
+--
+DO $$
+BEGIN
+   IF NOT EXISTS (
+      SELECT FROM pg_catalog.pg_database WHERE datname = 'card_test'
+   ) THEN
+      PERFORM dblink_exec('dbname=postgres', 'CREATE DATABASE card_test');
+   END IF;
+END $$;
+
+--
 -- Name: cards; Type: TABLE; Schema: public; Owner: postgres
 --
 

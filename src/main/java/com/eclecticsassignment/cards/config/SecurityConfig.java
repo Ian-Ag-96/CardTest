@@ -19,13 +19,9 @@ import com.eclecticsassignment.cards.util.JwtUtil;
 public class SecurityConfig {
 
     private final CustomUserDetailsService userDetailsService;
-    //private final JwtUtil jwtUtil;
 
-    public SecurityConfig(CustomUserDetailsService userDetailsService
-    		//, JwtUtil jwtUtil
-    		) {
+    public SecurityConfig(CustomUserDetailsService userDetailsService) {
         this.userDetailsService = userDetailsService;
-        //this.jwtUtil = jwtUtil;
     }
 
     @Bean
@@ -47,11 +43,13 @@ public class SecurityConfig {
         return authenticationConfiguration.getAuthenticationManager();
     }
 
+    //For encrypting user passwords and for password validation
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
     
+    //Utility for generating JWT token
     @Bean
     public JwtUtil jwtUtil() {
     	return new JwtUtil();
