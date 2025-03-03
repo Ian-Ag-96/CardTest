@@ -1,11 +1,11 @@
 package com.eclecticsassignment.cards.controller;
 
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -19,6 +19,7 @@ import com.eclecticsassignment.cards.model.UpdateCardNameModel;
 import com.eclecticsassignment.cards.model.UserModel;
 import com.eclecticsassignment.cards.repository.UserRepository;
 import com.eclecticsassignment.cards.service.CardService;
+import com.eclecticsassignment.cards.util.ConstantsUtil;
 import com.eclecticsassignment.cards.util.JwtUtil;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -70,8 +71,8 @@ public class CardController {
     		
     		if(user == null) {
     			log.info("User not found. Token must be invalid.");
-        		res.put("status", "1010");
-                res.put("message", "User not found. Token must be invalid.");
+        		res.put(ConstantsUtil.RESPONSE_KEY_STATUS, "1010");
+                res.put(ConstantsUtil.RESPONSE_KEY_MESSAGE, "User not found. Token must be invalid.");
                 return ResponseEntity.ok().body(res);
     		}
     		
@@ -80,20 +81,18 @@ public class CardController {
     		HttpHeaders headers = new HttpHeaders();
 			headers.setContentType(MediaType.APPLICATION_JSON);
             
-            res.put("status", "1001");
-            res.put("message", "User found.");
+            res.put(ConstantsUtil.RESPONSE_KEY_STATUS, "1001");
+            res.put(ConstantsUtil.RESPONSE_KEY_MESSAGE, "User found.");
             res.put("user", user);
             
             return ResponseEntity.ok().headers(headers).body(res);
     		
     	} catch (Exception e) {
-    		log.info("An error occurred. Error: {}", e.getMessage());
-    		res.put("status", "1010");
-            res.put("message", "An error ocurred.");
-            res.put("cause", e.getMessage());
-//            e.printStackTrace();
-            return ResponseEntity.ok().body(res);
-    	}
+    		log.info(ConstantsUtil.RESPONSE_GENERIC_ERROR, e.getMessage());
+    		res.put(ConstantsUtil.RESPONSE_KEY_STATUS, "1010");
+            res.put(ConstantsUtil.RESPONSE_KEY_MESSAGE, ConstantsUtil.GENERIC_ERROR_MESSAGE);
+            res.put(ConstantsUtil.KEY_CAUSE, e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(res);    	}
     }
     
     //Creates a user. Only users with role admin can perform this function
@@ -104,50 +103,50 @@ public class CardController {
     	try {
     		String email = userModel.getEmail();
     		if(email == null || email.isEmpty()) {
-    			log.info("Email parameter cannot be empty or missing.");
-        		res.put("status", "1010");
-                res.put("message", "Email parameter cannot be empty or missing.");
+    			log.info(ConstantsUtil.MISSING_EMAIL_ERROR);
+        		res.put(ConstantsUtil.RESPONSE_KEY_STATUS, "1010");
+                res.put(ConstantsUtil.RESPONSE_KEY_MESSAGE, ConstantsUtil.MISSING_EMAIL_ERROR);
                 return ResponseEntity.ok().body(res);
     		}
     		
     		String password = userModel.getPassword();
     		if(password == null || password.isEmpty()) {
-    			log.info("Password parameter cannot be empty or missing.");
-        		res.put("status", "1010");
-                res.put("message", "Password parameter cannot be empty or missing.");
+    			log.info(ConstantsUtil.MISSING_PASSWORD_ERROR);
+        		res.put(ConstantsUtil.RESPONSE_KEY_STATUS, "1010");
+                res.put(ConstantsUtil.RESPONSE_KEY_MESSAGE, ConstantsUtil.MISSING_PASSWORD_ERROR);
                 return ResponseEntity.ok().body(res);
     		}
     		
     		String role = userModel.getRole();
     		if(role == null || role.isEmpty()) {
     			log.info("Role parameter cannot be empty or missing.");
-        		res.put("status", "1010");
-                res.put("message", "Role parameter cannot be empty or missing.");
+        		res.put(ConstantsUtil.RESPONSE_KEY_STATUS, "1010");
+                res.put(ConstantsUtil.RESPONSE_KEY_MESSAGE, "Role parameter cannot be empty or missing.");
                 return ResponseEntity.ok().body(res);
     		}
     		
     		if(!User.isValidRole(role)) {
     			log.info("Role is invalid. Role can only be 'Member' or 'Admin'");
-        		res.put("status", "1010");
-                res.put("message", "Role is invalid. Role can only be 'Member' or 'Admin'");
+        		res.put(ConstantsUtil.RESPONSE_KEY_STATUS, "1010");
+                res.put(ConstantsUtil.RESPONSE_KEY_MESSAGE, "Role is invalid. Role can only be 'Member' or 'Admin'");
                 return ResponseEntity.ok().body(res);
     		}
     		
     		User existingUser = userRepository.getUserByEmail(userModel.getEmail());
     		if(existingUser != null) {
     			log.info("The user {} already exists.", userModel.getEmail());
-        		res.put("status", "1010");
-                res.put("message", "The user " + userModel.getEmail() + " already exists.");
+        		res.put(ConstantsUtil.RESPONSE_KEY_STATUS, "1010");
+                res.put(ConstantsUtil.RESPONSE_KEY_MESSAGE, "The user " + userModel.getEmail() + " already exists.");
                 return ResponseEntity.ok().body(res);
     		}
 
         	String username = jwtUtil.extractUsername(jwtUtil.getTokenFromRequest(request));
         	User currentUser = userRepository.getUserByEmail(username);
         	
-        	if(!currentUser.getRole().equals("Admin")) {
+        	if(!currentUser.getRole().equals(ConstantsUtil.KEY_ADMIN)) {
         		log.info("The user {} is not an admin. Only admins can create users.", username);
-        		res.put("status", "1010");
-                res.put("message", "The user " + username + " is not an admin. Only admins can create users.");
+        		res.put(ConstantsUtil.RESPONSE_KEY_STATUS, "1010");
+                res.put(ConstantsUtil.RESPONSE_KEY_MESSAGE, "The user " + username + " is not an admin. Only admins can create users.");
                 return ResponseEntity.ok().body(res);
         	}
         	
@@ -165,20 +164,18 @@ public class CardController {
 			
 			log.info("User created successfully.");
             
-            res.put("status", "1001");
-            res.put("message", "User created successfully.");
+            res.put(ConstantsUtil.RESPONSE_KEY_STATUS, "1001");
+            res.put(ConstantsUtil.RESPONSE_KEY_MESSAGE, "User created successfully.");
             res.put("user", createdUser);
             
             return ResponseEntity.ok().headers(headers).body(res);
     		
     	} catch (Exception e) {
-    		log.info("An error occurred. Error: {}", e.getMessage());
-    		res.put("status", "1010");
-            res.put("message", "An error ocurred.");
-            res.put("cause", e.getMessage());
-//            e.printStackTrace();
-            return ResponseEntity.ok().body(res);
-    	}
+    		log.info(ConstantsUtil.RESPONSE_GENERIC_ERROR, e.getMessage());
+    		res.put(ConstantsUtil.RESPONSE_KEY_STATUS, "1010");
+            res.put(ConstantsUtil.RESPONSE_KEY_MESSAGE, ConstantsUtil.GENERIC_ERROR_MESSAGE);
+            res.put(ConstantsUtil.KEY_CAUSE, e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(res);    	}
     }
 
     //Authenticates a user and returns a JWT token for subsequent requests
@@ -189,25 +186,25 @@ public class CardController {
     	try {
     		String email = credentials.get("email");
     		if(email == null || email.isEmpty()) {
-    			log.info("Email parameter cannot be empty or missing.");
-        		res.put("status", "1010");
-                res.put("message", "Email parameter cannot be empty or missing.");
+    			log.info(ConstantsUtil.MISSING_EMAIL_ERROR);
+        		res.put(ConstantsUtil.RESPONSE_KEY_STATUS, "1010");
+                res.put(ConstantsUtil.RESPONSE_KEY_MESSAGE, ConstantsUtil.MISSING_EMAIL_ERROR);
                 return ResponseEntity.ok().body(res);
     		}
     		
             String password = credentials.get("password");
             if(password == null || password.isEmpty()) {
-    			log.info("Password parameter cannot be empty or missing.");
-        		res.put("status", "1010");
-                res.put("message", "Password parameter cannot be empty or missing.");
+    			log.info(ConstantsUtil.MISSING_PASSWORD_ERROR);
+        		res.put(ConstantsUtil.RESPONSE_KEY_STATUS, "1010");
+                res.put(ConstantsUtil.RESPONSE_KEY_MESSAGE, ConstantsUtil.MISSING_PASSWORD_ERROR);
                 return ResponseEntity.ok().body(res);
     		}
             
             User existingUser = userRepository.getUserByEmail(email);
     		if(existingUser == null) {
     			log.info("The user {} does not exist.", email);
-        		res.put("status", "1010");
-                res.put("message", "The user " + email + " does not exist.");
+        		res.put(ConstantsUtil.RESPONSE_KEY_STATUS, "1010");
+                res.put(ConstantsUtil.RESPONSE_KEY_MESSAGE, "The user " + email + " does not exist.");
                 return ResponseEntity.ok().body(res);
     		}
             
@@ -220,8 +217,8 @@ public class CardController {
             String token = jwtUtil.generateToken(userDetails);
             
             log.info("User successfully authenticated.");
-            res.put("status", "1001");
-            res.put("message", "Authentication successful.");
+            res.put(ConstantsUtil.RESPONSE_KEY_STATUS, "1001");
+            res.put(ConstantsUtil.RESPONSE_KEY_MESSAGE, "Authentication successful.");
             res.put("token", token);
             
             HttpHeaders headers = new HttpHeaders();
@@ -230,13 +227,11 @@ public class CardController {
 			return ResponseEntity.ok().headers(headers).body(res);
     		
     	} catch (Exception e) {
-    		log.info("An error occurred. Error: {}", e.getMessage());
-    		res.put("status", "1010");
-            res.put("message", "An error occurred. Error: " + e.getMessage());
-            res.put("cause", e.getMessage());
-            //e.printStackTrace();
-            return ResponseEntity.ok().body(res);
-    	}
+    		log.info(ConstantsUtil.RESPONSE_GENERIC_ERROR, e.getMessage());
+    		res.put(ConstantsUtil.RESPONSE_KEY_STATUS, "1010");
+            res.put(ConstantsUtil.RESPONSE_KEY_MESSAGE, "An error occurred. Error: " + e.getMessage());
+            res.put(ConstantsUtil.KEY_CAUSE, e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(res);    	}
     }
     
     //Tests whether the DBConnection is active or available
@@ -248,26 +243,24 @@ public class CardController {
     		String connStatus = DBConn.testConn();
             if(connStatus.equals("Success")) {
             	log.info("Connection successful.");
-            	res.put("status", "1001");
-                res.put("message", "Db connection successful.");
+            	res.put(ConstantsUtil.RESPONSE_KEY_STATUS, "1001");
+                res.put(ConstantsUtil.RESPONSE_KEY_MESSAGE, "Db connection successful.");
                 HttpHeaders headers = new HttpHeaders();
     			headers.setContentType(MediaType.APPLICATION_JSON);
 
     			return ResponseEntity.ok().headers(headers).body(res);
             } else {
             	log.info("Connection failed.");
-            	res.put("status", "1010");
-                res.put("message", "Db connection failed.");
+            	res.put(ConstantsUtil.RESPONSE_KEY_STATUS, "1010");
+                res.put(ConstantsUtil.RESPONSE_KEY_MESSAGE, "Db connection failed.");
                 return ResponseEntity.ok().body(res);
             }
     	} catch (Exception e) {
-    		log.info("An error occurred. Error: {}", e.getMessage());
-    		res.put("status", "1010");
-            res.put("message", "An error ocurred.");
-            res.put("cause", e.getMessage());
-//            e.printStackTrace();
-            return ResponseEntity.ok().body(res);
-    	}
+    		log.info(ConstantsUtil.RESPONSE_GENERIC_ERROR, e.getMessage());
+    		res.put(ConstantsUtil.RESPONSE_KEY_STATUS, "1010");
+            res.put(ConstantsUtil.RESPONSE_KEY_MESSAGE, ConstantsUtil.GENERIC_ERROR_MESSAGE);
+            res.put(ConstantsUtil.KEY_CAUSE, e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(res);    	}
     }
     
     //Creates a card with the current authenticated user as the creator
@@ -279,16 +272,16 @@ public class CardController {
     		String cardName = cardModel.getName();
     		
     		if(cardName == null || cardName.isEmpty()) {
-    			log.info("Card Name cannot be null or empty.");
-    			res.put("status", "1010");
-                res.put("message", "Card Name cannot be null or empty.");
+    			log.info(ConstantsUtil.MISSING_CARD_NAME_ERROR);
+    			res.put(ConstantsUtil.RESPONSE_KEY_STATUS, "1010");
+                res.put(ConstantsUtil.RESPONSE_KEY_MESSAGE, ConstantsUtil.MISSING_CARD_NAME_ERROR);
                 return ResponseEntity.ok().body(res);
     		}
     		
     		if(cardService.getCardByName(cardName) != null) {
     			log.info("Card with name " + cardName + " already exists.");
-    			res.put("status", "1010");
-                res.put("message", "Card with name " + cardName + " already exists.");
+    			res.put(ConstantsUtil.RESPONSE_KEY_STATUS, "1010");
+                res.put(ConstantsUtil.RESPONSE_KEY_MESSAGE, "Card with name " + cardName + " already exists.");
                 return ResponseEntity.ok().body(res);
     		}
     		
@@ -296,9 +289,9 @@ public class CardController {
     		
     		if(cardColor != null && !cardColor.equals("")) {
     			if(!Card.isValidHexColor(cardColor)) {
-    				log.info("Color has to be of the format #12FF56 (# followed by 6 digits or characters between a-f).");
-    				res.put("status", "1010");
-                    res.put("message", "Color has to be of the format #12FF56 (# followed by 6 digits or characters between a-f).");
+    				log.info(ConstantsUtil.COLOR_FORMAT_ERROR);
+    				res.put(ConstantsUtil.RESPONSE_KEY_STATUS, "1010");
+                    res.put(ConstantsUtil.RESPONSE_KEY_MESSAGE, ConstantsUtil.COLOR_FORMAT_ERROR);
                     return ResponseEntity.ok().body(res);
     			}
     		}
@@ -323,20 +316,19 @@ public class CardController {
 			headers.setContentType(MediaType.APPLICATION_JSON);
             
 			log.info("Card created successfully.");
-            res.put("status", "1001");
-            res.put("message", "Card created successfully.");
+            res.put(ConstantsUtil.RESPONSE_KEY_STATUS, "1001");
+            res.put(ConstantsUtil.RESPONSE_KEY_MESSAGE, "Card created successfully.");
             res.put("card", createdCard);
             
             return ResponseEntity.ok().headers(headers).body(res);
     		
     	} catch (Exception e) {
     		log.info("An error occurred. Error: {}", e.getMessage());
-    		res.put("status", "1010");
-            res.put("message", "An error ocurred.");
-            res.put("cause", e.getMessage());
-//            e.printStackTrace();
-            return ResponseEntity.ok().body(res);
-    	}
+    		res.put(ConstantsUtil.RESPONSE_KEY_STATUS, "1010");
+            res.put(ConstantsUtil.RESPONSE_KEY_MESSAGE, ConstantsUtil.GENERIC_ERROR_MESSAGE);
+            res.put(ConstantsUtil.KEY_CAUSE, e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(res);
+        }
     }
     
     //Updates the name of the card.
@@ -349,8 +341,8 @@ public class CardController {
     		
     		if(currentCardName == null || currentCardName.isEmpty()) {
     			log.info("Old Card Name cannot be null or empty.");
-    			res.put("status", "1010");
-                res.put("message", "Old Card Name cannot be null or empty.");
+    			res.put(ConstantsUtil.RESPONSE_KEY_STATUS, "1010");
+                res.put(ConstantsUtil.RESPONSE_KEY_MESSAGE, "Old Card Name cannot be null or empty.");
                 return ResponseEntity.ok().body(res);
     		}
     		
@@ -358,15 +350,15 @@ public class CardController {
     		
     		if(newCardName == null || newCardName.isEmpty()) {
     			log.info("New Card Name cannot be null or empty.");
-    			res.put("status", "1010");
-                res.put("message", "New Card Name cannot be null or empty.");
+    			res.put(ConstantsUtil.RESPONSE_KEY_STATUS, "1010");
+                res.put(ConstantsUtil.RESPONSE_KEY_MESSAGE, "New Card Name cannot be null or empty.");
                 return ResponseEntity.ok().body(res);
     		}
     		
     		if(currentCardName.equals(newCardName)) {
     			log.info("Old Card Name is the same as New Card Name.");
-    			res.put("status", "1010");
-                res.put("message", "Old Card Name is the same as New Card Name.");
+    			res.put(ConstantsUtil.RESPONSE_KEY_STATUS, "1010");
+                res.put(ConstantsUtil.RESPONSE_KEY_MESSAGE, "Old Card Name is the same as New Card Name.");
                 return ResponseEntity.ok().body(res);
     		}
     		
@@ -378,13 +370,13 @@ public class CardController {
     			User user = userRepository.getUserByEmail(creator);
     			
     			log.info("Checking whether user is authorized to modify the card...");
-    			if(currentCard.getCreator().equals(creator) || user.getRole().equals("Admin")) {
+    			if(currentCard.getCreator().equals(creator) || user.getRole().equals(ConstantsUtil.KEY_ADMIN)) {
     				int affectedRows = cardService.updateCardName(currentCardName, newCardName);
     				
     				if(affectedRows > 0) {
     					log.info("Card updated successfully.");
-    					res.put("status", "1001");
-                        res.put("message", "Card updated successfully.");
+    					res.put(ConstantsUtil.RESPONSE_KEY_STATUS, "1001");
+                        res.put(ConstantsUtil.RESPONSE_KEY_MESSAGE, "Card updated successfully.");
                         
                         Card newCard = cardService.getCardByName(newCardName);
                         res.put("card", newCard);
@@ -395,31 +387,29 @@ public class CardController {
             			return ResponseEntity.ok().headers(headers).body(res);
     				} else {
     					log.info("Failed to update card.");
-    					res.put("status", "1010");
-                        res.put("message", "Failed to update card.");
+    					res.put(ConstantsUtil.RESPONSE_KEY_STATUS, "1010");
+                        res.put(ConstantsUtil.RESPONSE_KEY_MESSAGE, "Failed to update card.");
                         return ResponseEntity.ok().body(res);
     				}
         			
     			} else {
-    				log.info("The user is not an admin nor the card creator. They cannot update the card.");
-    				res.put("status", "1010");
-                    res.put("message", "The user is not an admin nor the card creator. They cannot update the card.");
+    				log.info(ConstantsUtil.UNAUTHORIZED_UPDATE_ERROR);
+    				res.put(ConstantsUtil.RESPONSE_KEY_STATUS, "1010");
+                    res.put(ConstantsUtil.RESPONSE_KEY_MESSAGE, ConstantsUtil.UNAUTHORIZED_UPDATE_ERROR);
                     return ResponseEntity.ok().body(res);
     			}
     		} else {
     			log.info("Card with name " + currentCardName + " does not exist.");
-    			res.put("status", "1010");
-                res.put("message", "Card with name " + currentCardName + " does not exist.");
+    			res.put(ConstantsUtil.RESPONSE_KEY_STATUS, "1010");
+                res.put(ConstantsUtil.RESPONSE_KEY_MESSAGE, "Card with name " + currentCardName + " does not exist.");
                 return ResponseEntity.ok().body(res);
     		}
     	} catch (Exception e) {
-    		log.info("An error occurred. Error: {}", e.getMessage());
-    		res.put("status", "1010");
-            res.put("message", "An error ocurred.");
-            res.put("cause", e.getMessage());
-//            e.printStackTrace();
-            return ResponseEntity.ok().body(res);
-    	}
+    		log.info(ConstantsUtil.RESPONSE_GENERIC_ERROR, e.getMessage());
+    		res.put(ConstantsUtil.RESPONSE_KEY_STATUS, "1010");
+            res.put(ConstantsUtil.RESPONSE_KEY_MESSAGE, ConstantsUtil.GENERIC_ERROR_MESSAGE);
+            res.put(ConstantsUtil.KEY_CAUSE, e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(res);    	}
     }
     
     //Updates the other card details excluding the name
@@ -429,19 +419,19 @@ public class CardController {
     	Map<String, Object> res = new HashMap<>();
     	try {
     		
-    		if(!cardModel.containsKey("color") && !cardModel.containsKey("description") && !cardModel.containsKey("status")) {
+    		if(!cardModel.containsKey(ConstantsUtil.KEY_COLOR) && !cardModel.containsKey(ConstantsUtil.KEY_DESCRIPTION) && !cardModel.containsKey(ConstantsUtil.RESPONSE_KEY_STATUS)) {
     			log.info("Color, status, and description are absent. No updates can be made. Add at least one of these fields to update.");
-    			res.put("status", "1010");
-                res.put("message", "Color, status, and description are absent. No updates can be made. Add at least one of these fields to update.");
+    			res.put(ConstantsUtil.RESPONSE_KEY_STATUS, "1010");
+                res.put(ConstantsUtil.RESPONSE_KEY_MESSAGE, "Color, status, and description are absent. No updates can be made. Add at least one of these fields to update.");
                 return ResponseEntity.ok().body(res);
     		}
     		
     		String cardName = cardModel.get("name");
     		
     		if(cardName == null || cardName.isEmpty()) {
-    			log.info("Card Name cannot be null or empty.");
-    			res.put("status", "1010");
-                res.put("message", "Card Name cannot be null or empty.");
+    			log.info(ConstantsUtil.MISSING_CARD_NAME_ERROR);
+    			res.put(ConstantsUtil.RESPONSE_KEY_STATUS, "1010");
+                res.put(ConstantsUtil.RESPONSE_KEY_MESSAGE, ConstantsUtil.MISSING_CARD_NAME_ERROR);
                 return ResponseEntity.ok().body(res);
     		}
     		
@@ -449,35 +439,35 @@ public class CardController {
     		
     		if(cardService.getCardByName(cardName) == null) {
     			log.info("Card with name " + cardName + " does not exist.");
-    			res.put("status", "1010");
-                res.put("message", "Card with name " + cardName + " does not exist.");
+    			res.put(ConstantsUtil.RESPONSE_KEY_STATUS, "1010");
+                res.put(ConstantsUtil.RESPONSE_KEY_MESSAGE, "Card with name " + cardName + " does not exist.");
                 return ResponseEntity.ok().body(res);
     		}
     		
     		String creator = jwtUtil.extractUsername(jwtUtil.getTokenFromRequest(request));
 			User user = userRepository.getUserByEmail(creator);
-			if(!cardForUpdate.getCreator().equals(creator) && !user.getRole().equals("Admin")) {
-				log.info("The user is not an admin nor the card creator. They cannot update the card.");
-				res.put("status", "1010");
-                res.put("message", "The user is not an admin nor the card creator. They cannot update the card.");
+			if(!cardForUpdate.getCreator().equals(creator) && !user.getRole().equals(ConstantsUtil.KEY_ADMIN)) {
+				log.info(ConstantsUtil.UNAUTHORIZED_UPDATE_ERROR);
+				res.put(ConstantsUtil.RESPONSE_KEY_STATUS, "1010");
+                res.put(ConstantsUtil.RESPONSE_KEY_MESSAGE, ConstantsUtil.UNAUTHORIZED_UPDATE_ERROR);
                 return ResponseEntity.ok().body(res);
 			}
     		
-    		String color = cardModel.containsKey("color") ? cardModel.get("color") : null;
-    		String description = cardModel.containsKey("description") ? cardModel.get("description") : null;
-    		String status = cardModel.containsKey("status") ? cardModel.get("status") : null;
+    		String color = cardModel.containsKey(ConstantsUtil.KEY_COLOR) ? cardModel.get(ConstantsUtil.KEY_COLOR) : null;
+    		String description = cardModel.containsKey(ConstantsUtil.KEY_DESCRIPTION) ? cardModel.get(ConstantsUtil.KEY_DESCRIPTION) : null;
+    		String status = cardModel.containsKey(ConstantsUtil.RESPONSE_KEY_STATUS) ? cardModel.get(ConstantsUtil.RESPONSE_KEY_STATUS) : null;
     		
     		if(color != null && !Card.isValidHexColor(color)) {
-				log.info("Color has to be of the format #12FF56 (# followed by 6 digits or characters between a-f).");
-				res.put("status", "1010");
-                res.put("message", "Color has to be of the format #12FF56 (# followed by 6 digits or characters between a-f).");
+				log.info(ConstantsUtil.COLOR_FORMAT_ERROR);
+				res.put(ConstantsUtil.RESPONSE_KEY_STATUS, "1010");
+                res.put(ConstantsUtil.RESPONSE_KEY_MESSAGE, ConstantsUtil.COLOR_FORMAT_ERROR);
                 return ResponseEntity.ok().body(res);
 			}
     		
     		if(status != null && !Card.isValidStatus(status)) {
 				log.info("Status can only be 'To Do', 'In Progress', or 'Done'.");
-				res.put("status", "1010");
-                res.put("message", "Invalid status. Status can only be 'To Do', 'In Progress', or 'Done'.");
+				res.put(ConstantsUtil.RESPONSE_KEY_STATUS, "1010");
+                res.put(ConstantsUtil.RESPONSE_KEY_MESSAGE, "Invalid status. Status can only be 'To Do', 'In Progress', or 'Done'.");
                 return ResponseEntity.ok().body(res);
 			}
     		
@@ -491,8 +481,8 @@ public class CardController {
     		cardService.saveCard(cardForUpdate);
     		
     		log.info("Card updated successfully.");
-    		res.put("status", "1001");
-            res.put("message", "Card updated successfully.");
+    		res.put(ConstantsUtil.RESPONSE_KEY_STATUS, "1001");
+            res.put(ConstantsUtil.RESPONSE_KEY_MESSAGE, "Card updated successfully.");
             
             Card updatedCard = cardService.getCardByName(cardName);
             res.put("card", updatedCard);
@@ -503,13 +493,11 @@ public class CardController {
 			return ResponseEntity.ok().headers(headers).body(res);
     		
     	} catch (Exception e) {
-    		log.info("An error occurred. Error: {}", e.getMessage());
-    		res.put("status", "1010");
-            res.put("message", "An error occurred.");
-            res.put("cause", e.getMessage());
-//            e.printStackTrace();
-            return ResponseEntity.ok().body(res);
-    	}
+    		log.info(ConstantsUtil.RESPONSE_GENERIC_ERROR, e.getMessage());
+    		res.put(ConstantsUtil.RESPONSE_KEY_STATUS, "1010");
+            res.put(ConstantsUtil.RESPONSE_KEY_MESSAGE, "An error occurred.");
+            res.put(ConstantsUtil.KEY_CAUSE, e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(res);    	}
     }
     
     //Soft deletes a card
@@ -520,16 +508,16 @@ public class CardController {
     	try {
     		String cardName = data.get("cardName");
     		if(cardName == null || cardName.isEmpty()) {
-    			log.info("Card Name cannot be null or empty.");
-    			res.put("status", "1010");
-                res.put("message", "Card Name cannot be null or empty.");
+    			log.info(ConstantsUtil.MISSING_CARD_NAME_ERROR);
+    			res.put(ConstantsUtil.RESPONSE_KEY_STATUS, "1010");
+                res.put(ConstantsUtil.RESPONSE_KEY_MESSAGE, ConstantsUtil.MISSING_CARD_NAME_ERROR);
                 return ResponseEntity.ok().body(res);
     		}
     		
     		if(cardService.getCardByName(cardName) == null) {
     			log.info("Card with name " + cardName + " does not exist.");
-    			res.put("status", "1010");
-                res.put("message", "Card with name " + cardName + " does not exist.");
+    			res.put(ConstantsUtil.RESPONSE_KEY_STATUS, "1010");
+                res.put(ConstantsUtil.RESPONSE_KEY_MESSAGE, "Card with name " + cardName + " does not exist.");
                 return ResponseEntity.ok().body(res);
     		}
     		
@@ -539,10 +527,10 @@ public class CardController {
     		
     		log.info("Card found. Details: {}", cardToBeDeleted.toString());
     		
-    		if(!user.getRole().equals("Admin") && !cardToBeDeleted.getCreator().equals(creator)) {
+    		if(!user.getRole().equals(ConstantsUtil.KEY_ADMIN) && !cardToBeDeleted.getCreator().equals(creator)) {
     			log.info("User cannot delete the card. The user must be the creator of the card or an admin to delete it.");
-    			res.put("status", "1010");
-                res.put("message", "User cannot delete the card. The user must be the creator of the card or an admin to delete it.");
+    			res.put(ConstantsUtil.RESPONSE_KEY_STATUS, "1010");
+                res.put(ConstantsUtil.RESPONSE_KEY_MESSAGE, "User cannot delete the card. The user must be the creator of the card or an admin to delete it.");
                 return ResponseEntity.ok().body(res);
     		}
     		
@@ -551,8 +539,8 @@ public class CardController {
     		
     		if(affectedRows > 0) {
     			log.info("Card deleted successfully.");
-    			res.put("status", "1001");
-                res.put("message", "Card deleted successfully.");
+    			res.put(ConstantsUtil.RESPONSE_KEY_STATUS, "1001");
+                res.put(ConstantsUtil.RESPONSE_KEY_MESSAGE, "Card deleted successfully.");
                 
                 HttpHeaders headers = new HttpHeaders();
     			headers.setContentType(MediaType.APPLICATION_JSON);
@@ -560,19 +548,17 @@ public class CardController {
     			return ResponseEntity.ok().headers(headers).body(res);
     		} else {
     			log.info("Failed to delete card.");
-    			res.put("status", "1010");
-                res.put("message", "Failed to delete card.");
+    			res.put(ConstantsUtil.RESPONSE_KEY_STATUS, "1010");
+                res.put(ConstantsUtil.RESPONSE_KEY_MESSAGE, "Failed to delete card.");
                 return ResponseEntity.ok().body(res);
     		}
     		
     	} catch (Exception e) {
-    		log.info("An error occurred. Error: {}", e.getMessage());
-    		res.put("status", "1010");
-            res.put("message", "An error ocurred.");
-            res.put("cause", e.getMessage());
-//            e.printStackTrace();
-            return ResponseEntity.ok().body(res);
-    	}
+    		log.info(ConstantsUtil.RESPONSE_GENERIC_ERROR, e.getMessage());
+    		res.put(ConstantsUtil.RESPONSE_KEY_STATUS, "1010");
+            res.put(ConstantsUtil.RESPONSE_KEY_MESSAGE, ConstantsUtil.GENERIC_ERROR_MESSAGE);
+            res.put(ConstantsUtil.KEY_CAUSE, e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(res);    	}
     }
     
     //Fetches all cards that are for the currently authenticated user. Limited to 10 records max.
@@ -585,9 +571,9 @@ public class CardController {
     		String username = jwtUtil.extractUsername(jwtUtil.getTokenFromRequest(request));
     		User user =  userRepository.getUserByEmail(username);
     		if(user == null) {
-    			log.info("User does not exist. Invalid token.");
-    			res.put("status", "1010");
-                res.put("message", "User does not exist. Invalid token.");
+    			log.info(ConstantsUtil.INVALID_TOKEN_ERROR);
+    			res.put(ConstantsUtil.RESPONSE_KEY_STATUS, "1010");
+                res.put(ConstantsUtil.RESPONSE_KEY_MESSAGE, ConstantsUtil.INVALID_TOKEN_ERROR);
                 return ResponseEntity.ok().body(res);
     		}
     		
@@ -595,20 +581,20 @@ public class CardController {
     		log.info("Filters: {}", sortFilters);
     		
     		log.info("Fetching all cards for the current user...");
-    		List<Card> allCards = user.getRole().equals("Admin") ?
+    		List<Card> allCards = user.getRole().equals(ConstantsUtil.KEY_ADMIN) ?
     					cardService.getAllCards(sortFilters)
     				:	cardService.getAllMemeberCards(username, sortFilters);
     		
-    		if(allCards ==  null || allCards.size() < 1) {
+    		if(allCards ==  null || allCards.isEmpty()) {
     			log.info("No cards found.");
-    			res.put("status", "1010");
-                res.put("message", "No cards found.");
+    			res.put(ConstantsUtil.RESPONSE_KEY_STATUS, "1010");
+                res.put(ConstantsUtil.RESPONSE_KEY_MESSAGE, "No cards found.");
                 return ResponseEntity.ok().body(res);
     		}
     		
     		log.info("Cards fetched successfully. Limited to 10 cards max.");
-    		res.put("status", "1001");
-            res.put("message", "Cards fetched successfully. Limited to 10 cards max.");
+    		res.put(ConstantsUtil.RESPONSE_KEY_STATUS, "1001");
+            res.put(ConstantsUtil.RESPONSE_KEY_MESSAGE, "Cards fetched successfully. Limited to 10 cards max.");
             res.put("Cards", allCards);
             
             HttpHeaders headers = new HttpHeaders();
@@ -617,13 +603,11 @@ public class CardController {
 			return ResponseEntity.ok().headers(headers).body(res);
 
     	} catch (Exception e) {
-    		log.info("An error occurred. Error: {}", e.getMessage());
-    		res.put("status", "1010");
-            res.put("message", "An error ocurred.");
-            res.put("cause", e.getMessage());
-//            e.printStackTrace();
-            return ResponseEntity.ok().body(res);
-    	}
+    		log.info(ConstantsUtil.RESPONSE_GENERIC_ERROR, e.getMessage());
+    		res.put(ConstantsUtil.RESPONSE_KEY_STATUS, "1010");
+            res.put(ConstantsUtil.RESPONSE_KEY_MESSAGE, ConstantsUtil.GENERIC_ERROR_MESSAGE);
+            res.put(ConstantsUtil.KEY_CAUSE, e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(res);    	}
     }
     
     //Fetches a single card data
@@ -635,17 +619,17 @@ public class CardController {
     		String username = jwtUtil.extractUsername(jwtUtil.getTokenFromRequest(request));
     		User user =  userRepository.getUserByEmail(username);
     		if(user == null) {
-    			log.info("User does not exist. Invalid token.");
-    			res.put("status", "1010");
-                res.put("message", "User does not exist. Invalid token.");
+    			log.info(ConstantsUtil.INVALID_TOKEN_ERROR);
+    			res.put(ConstantsUtil.RESPONSE_KEY_STATUS, "1010");
+                res.put(ConstantsUtil.RESPONSE_KEY_MESSAGE, ConstantsUtil.INVALID_TOKEN_ERROR);
                 return ResponseEntity.ok().body(res);
     		}
     		
     		String cardName = data.get("cardName");
     		
     		if(cardName == null || cardName.isEmpty()) {
-    			res.put("status", "1010");
-                res.put("message", "Card Name cannot be null or empty.");
+    			res.put(ConstantsUtil.RESPONSE_KEY_STATUS, "1010");
+                res.put(ConstantsUtil.RESPONSE_KEY_MESSAGE, ConstantsUtil.MISSING_CARD_NAME_ERROR);
                 return ResponseEntity.ok().body(res);
     		}
     		log.info("Fetching card data...");
@@ -653,22 +637,22 @@ public class CardController {
     		
     		if(card == null) {
     			log.info("Card does not exist.");
-    			res.put("status", "1010");
-                res.put("message", "Card does not exist.");
+    			res.put(ConstantsUtil.RESPONSE_KEY_STATUS, "1010");
+                res.put(ConstantsUtil.RESPONSE_KEY_MESSAGE, "Card does not exist.");
                 return ResponseEntity.ok().body(res);
     		}
     		
     		log.info("Card found. Details: {}", card.toString());
     		
-    		if(!user.getRole().equals("Admin") && !card.getCreator().equals(username)) {
+    		if(!user.getRole().equals(ConstantsUtil.KEY_ADMIN) && !card.getCreator().equals(username)) {
     			log.info("You must own the card or be the admin to view it.");
-    			res.put("status", "1010");
-                res.put("message", "You must own the card or be the admin to view it.");
+    			res.put(ConstantsUtil.RESPONSE_KEY_STATUS, "1010");
+                res.put(ConstantsUtil.RESPONSE_KEY_MESSAGE, "You must own the card or be the admin to view it.");
                 return ResponseEntity.ok().body(res);
     		}
     		log.info("Card fetched successfully.");
-    		res.put("status", "1001");
-            res.put("message", "Card fetched successfully.");
+    		res.put(ConstantsUtil.RESPONSE_KEY_STATUS, "1001");
+            res.put(ConstantsUtil.RESPONSE_KEY_MESSAGE, "Card fetched successfully.");
             res.put("Card", card);
             
             HttpHeaders headers = new HttpHeaders();
@@ -678,12 +662,11 @@ public class CardController {
     		
     		
     	} catch (Exception e) {
-    		log.info("An error occurred. Error: {}", e.getMessage());
-    		res.put("status", "1010");
-            res.put("message", "An error ocurred.");
-            res.put("cause", e.getMessage());
-//            e.printStackTrace();
-            return ResponseEntity.ok().body(res);
+    		log.info(ConstantsUtil.RESPONSE_GENERIC_ERROR, e.getMessage());
+    		res.put(ConstantsUtil.RESPONSE_KEY_STATUS, "1010");
+            res.put(ConstantsUtil.RESPONSE_KEY_MESSAGE, ConstantsUtil.GENERIC_ERROR_MESSAGE);
+            res.put(ConstantsUtil.KEY_CAUSE, e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(res);
     	}
     }
 }

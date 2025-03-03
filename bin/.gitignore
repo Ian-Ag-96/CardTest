@@ -31,16 +31,3 @@ build/
 
 ### VS Code ###
 .vscode/
-/.gitattributes
-/.gitignore
-/.mvn/
-/CardTest.postman_collection.json
-/Dockerfile
-/README.md
-/card-test.sql
-/docker-compose.yml
-/instructions.txt
-/mvnw
-/mvnw.cmd
-/pom.xml
-/src/
