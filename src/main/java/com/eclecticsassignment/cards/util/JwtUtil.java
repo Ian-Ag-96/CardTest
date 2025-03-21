@@ -20,7 +20,7 @@ import java.util.function.Function;
 @Component
 public class JwtUtil {
 
-    private final String SECRET_KEY = "mySuperSecretKeyForJWTGeneration12345"; // Should be stored securely
+    private static final String SECRET_KEY = "mySuperSecretKeyForJWTGeneration12345"; // Secret key sample for signing JWTs
 
     private Key getSigningKey() {
         return Keys.hmacShaKeyFor(SECRET_KEY.getBytes());
@@ -55,7 +55,7 @@ public class JwtUtil {
     }
 
     private Claims extractAllClaims(String token) {
-        JwtParser parser = Jwts.parser()  // Or use Jwts.parserBuilder()
+        JwtParser parser = Jwts.parser() // Create a JwtParser
                 .setSigningKey(getSigningKey())  // Set the signing key
                 .build();  // Build the JwtParser
 

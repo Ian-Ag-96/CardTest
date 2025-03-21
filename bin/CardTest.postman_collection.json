@@ -2,7 +2,7 @@
 	"info": {
 		"_postman_id": "da8119fd-0ee8-409a-8e9e-6ab0a836b161",
 		"name": "CardTest",
-		"description": "This collection contains requests to allow for:\n\n- User Authentication\n    \n- Card CRUD operations\n    \n\nThe requests allow for the full functionality of the Card Service.\n\n# Prerequisites\n\n- Ensure at least Java version 17 is installed on the host machine to enable the build process for the jar file.\n    \n- You may optionally have maven (latest) installed as well.\n    \n- The application uses port 8081 and the database uses port 5431. Ensure the ports are free and accept tcp connections. If not you will need to modify the application.properties file to reflect the database port you wish to use, the Dockerfile to modify the exposed application port, and the docker-compose.yml file to modify both the database and application ports to the desired ones.\n    \n- Ensure docker is installed on the host machine.\n    \n- Ensure the host machine is connected to the internet.\n    \n\n# Configuration\n\n- Clone the repository from the command line if git is installed in your system using 'git clone [https://github.com/Ian-Ag-96/CardTest.git'](https://github.com/Ian-Ag-96/CardTest.git') or any other cloning mechanism you may wish to use.\n    \n- Navigate to the directory where the project resides and open the command line/terminal.\n    \n- Run the command 'mvn clean install -DskipTests' if maven is already installed or 'mvnw clean install -DskipTests' - (Windows) or './mvnw clean install -DskipTests' (Linux) if it is not installed.\n    \n- We are skipping tests because we want to only build the jar file. A container called 'card_test_tests' will be created later on for specifically running tests.\n    \n- After the jar file has been built successfully, ensure docker is running first then run the command 'docker-compose up --build' to download the necessary files, handle configurations, create all the containers, and start the application, including running tests. This may take some time as maven will have to be installed including its dependencies to handle tests.\n    \n- For specific cases you may use the following commands:  \n    \\- 'docker-compose up database' to only start the database and initialize the data  \n    \\- 'docker-compose up app' to start the application and database without running tests  \n    \\- 'docker-compose up test' to run the tests only\n    \n\n# Users\n\nThere are preloaded users in the database from the sql file 'card-test.sql':\n\n```\n- Admin user\n    email: 'adminone@administrators.com'\n    password: 'admin1234'\n- Member user\n    email: 'memberfour@allmembers.com'\n    password: 'member1234'\n\n ```\n\n# Documentation\n\nThe documentation can be found on this link: [https://documenter.getpostman.com/view/41252801/2sAYdZvaLy](https://documenter.getpostman.com/view/41252801/2sAYdZvaLy)  \nThe documentation is done using Postman.  \nRequests can be found in the file 'CardTest.postman_collection'\n\n# Extras\n\nAn API, though out of scope, for creating users is also included in the service.",
+		"description": "This collection contains requests to allow for:\n\n- User Authentication\n    \n- Card CRUD operations\n    \n\nThe requests allow for the full functionality of the Card Service.\n\n# Prerequisites\n\nEnsure at least Java version 17 is installed on the host machine to enable the build process for the jar file.  \nYou may optionally have maven (latest) installed as well.  \nThe application uses port 8081 and the database uses port 5431. Ensure the ports are free and accept tcp connections. If not you will need to modify the application.properties file to reflect the database port you wish to use, the Dockerfile to modify the exposed application port, and the docker-compose.yml file to modify both the database and application ports to the desired ones.  \nEnsure docker is installed on the host machine.  \nEnsure the host machine is connected to the internet.\n\n# Configuration\n\nClone the repository from the command line if git is installed in your system using 'git clone [https://github.com/Ian-Ag-96/CardTest.git'](https://github.com/Ian-Ag-96/CardTest.git') or any other cloning mechanism you may wish to use.  \nNavigate to the directory where the project resides and open the command line/terminal.  \nRun the command 'mvn clean install -DskipTests' if maven is already installed or 'mvnw clean install -DskipTests' - (Windows) or './mvnw clean install -DskipTests' (Linux) if it is not installed. We are skipping tests because we want to only build the jar file. A container called 'card_test_tests' will be created later on for specifically running tests.  \nAfter the jar file has been built successfully, ensure docker is running first then run the command 'docker-compose up --build' to download the necessary files, handle configurations, create all the containers, and start the application, including running tests. This may take some time as maven will have to be installed including its dependencies to handle tests.  \nFor specific cases you may use the following commands:  \n'docker-compose up database' to only start the database and initialize the data  \n'docker-compose up app' to start the application and database without running tests  \n'docker-compose up test' to run the tests only\n\n# Users\n\nThere are preloaded users in the database from the sql file 'card-test.sql':\n\n```\n- Admin user\n    email: 'adminone@administrators.com'\n    password: 'admin1234'\n- Member user\n    email: 'memberfour@allmembers.com'\n    password: 'member1234'\n\n ```\n\n# Documentation\n\nThe documentation can be found on this link: [https://documenter.getpostman.com/view/41252801/2sAYdZvaLy](https://documenter.getpostman.com/view/41252801/2sAYdZvaLy)  \nThe documentation is done using Postman.  \nRequests can be found in the file 'CardTest.postman_collection'\n\n# Extras\n\nAn API, though out of scope, for creating users is also included in the service.",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "41252801"
 	},
@@ -17,7 +17,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"email\": \"memberone@allmembers.com\",\r\n    \"password\": \"member1234\"\r\n}",
+							"raw": "{\r\n    \"email\": \"adminone@administrators.com\",\r\n    \"password\": \"admin1234\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1383,7 +1383,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"Member One Card 3\",\r\n    \"color\": \"#FFFFFF\",\r\n    \"description\": \"A white memeber card\"\r\n}",
+							"raw": "{\r\n    \"name\": \"Member Card 2\",\r\n    \"color\": \"#FFFFFF\",\r\n    \"description\": \"A white memeber card\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1732,7 +1732,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"Member Card 2\",\r\n    \"color\": \"#000000\",\r\n    \"description\": \"A card being processed.\",\r\n    \"status\": \"In Progress\"\r\n}",
+							"raw": "{\r\n    \"name\": \"AdministratorCard\",\r\n    \"color\": \"#000000\",\r\n    \"description\": \"A card being processed.\",\r\n    \"status\": \"In Progress\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -2312,7 +2312,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"oldCardName\": \"Member Card 2\",\r\n    \"newCardName\": \"AdminCard\"\r\n}",
+							"raw": "{\r\n    \"oldCardName\": \"AdministratorCard\",\r\n    \"newCardName\": \"AdminCard\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -2892,7 +2892,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"cardName\": \"AdminCard\"\r\n}",
+							"raw": "{\r\n    \"cardName\": \"Member Card 2\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -2927,12 +2927,10 @@
 									}
 								},
 								"url": {
-									"raw": "http://localhost:8081/api/deleteCard",
-									"protocol": "http",
+									"raw": "{{baseUrl}}/api/deleteCard",
 									"host": [
-										"localhost"
+										"{{baseUrl}}"
 									],
-									"port": "8081",
 									"path": [
 										"api",
 										"deleteCard"
@@ -3244,7 +3242,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"dateCreated\": true,\r\n    \"descending\": true\r\n}",
+							"raw": "{\r\n    \"creator\": true\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -3261,7 +3259,7 @@
 								"getAllCards"
 							]
 						},
-						"description": "Request for fetching all cards created by a member or all cards created for an admin.\n\nThe request body may contain up to 5 fields, with 4 of them being name, status, color, and dateCreated as the sort filters and ascending or descending as the order.\n\nStartFragment\n\n``` http\n{\n    \"name\": true,\n    \"status\": false,\n    \"color\": false,\n    \"date_created\": false,\n    \"ascending\": true\n}\n\n ```\n\nEndFragment  \n\n``` http\n{\n    \"name\": true,\n    \"status\": false,\n    \"color\": false,\n    \"date_created\": false,\n    \"descending\": true\n}\n\n ```"
+						"description": "Request for fetching all cards"
 					},
 					"response": [
 						{
@@ -3279,12 +3277,10 @@
 									}
 								},
 								"url": {
-									"raw": "http://localhost:8081/api/getAllCards",
-									"protocol": "http",
+									"raw": "{{baseUrl}}/api/getAllCards",
 									"host": [
-										"localhost"
+										"{{baseUrl}}"
 									],
-									"port": "8081",
 									"path": [
 										"api",
 										"getAllCards"
@@ -3519,7 +3515,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"cardName\": \"AdminCard\"\r\n}",
+							"raw": "{\r\n    \"cardName\": \"Member Card\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -3554,12 +3550,10 @@
 									}
 								},
 								"url": {
-									"raw": "http://localhost:8081/api/getSingleCard",
-									"protocol": "http",
+									"raw": "{{baseUrl}}/api/getSingleCard",
 									"host": [
-										"localhost"
+										"{{baseUrl}}"
 									],
-									"port": "8081",
 									"path": [
 										"api",
 										"getSingleCard"

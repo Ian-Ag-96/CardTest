@@ -1,0 +1,45 @@
+services:
+  database:
+    image: postgres:17-alpine
+    container_name: card_test_db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: card_test
+    ports:
+      - "5431:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+      - ./card-test.sql:/docker-entrypoint-initdb.d/card-test.sql:ro
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: card_test_app
+    depends_on:
+      - database
+    ports:
+      - "8081:8081"
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+    command: ["java", "-jar", "/app/app.jar"]
+    extra_hosts:
+      - "host.docker.internal:host-gateway" # Ensures Linux compatibility when using host.docker.internal
+
+  test:
+    image: maven:3.8.5-eclipse-temurin-17-alpine
+    container_name: card_test_tests
+    depends_on:
+      - database
+    volumes:
+      - .:/app # Mount the project directory
+      - maven_cache:/root/.m2 # Cache Maven dependencies
+    working_dir: /app
+    command: ["mvn", "test"]
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+
+volumes:
+  db_data:
+  maven_cache:

@@ -39,8 +39,8 @@ build/
 /README.md
 /card-test.sql
 /docker-compose.yml
-/instructions.txt
 /mvnw
 /mvnw.cmd
 /pom.xml
+/sonar-project.prperties
 /src/

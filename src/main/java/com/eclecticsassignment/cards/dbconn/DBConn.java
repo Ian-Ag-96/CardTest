@@ -14,6 +14,8 @@ public class DBConn {
     private static final String DOCKER_URL = "jdbc:postgresql://host.docker.internal:5431/card_test";
     private static final String USER = "postgres";
     private static final String PASSWORD = "root";
+    
+    private DBConn() {}
 
     public static Connection getConnection() throws SQLException {
         return DriverManager.getConnection(URL, USER, PASSWORD);
@@ -38,7 +40,7 @@ public class DBConn {
                 if (conn2 != null) {
                 	log.info("Conn URL: {}", conn2.getMetaData().getURL());
                 	log.info("Conn User: {}", conn2.getMetaData().getUserName());
-                    System.out.println("Connected to the database successfully!");
+                    log.info("Connected to the database successfully!");
                     res = "Success";
                 }
             } catch (SQLException e2) {

@@ -1,0 +1,6 @@
+sonar.projectKey=cards
+sonar.projectName=Cards
+sonar.host.url=http://localhost:64120
+sonar.sources=src
+sonar.language=java
+sonar.java.binaries=bin_sonarqube
