@@ -25,7 +25,6 @@ public class Card {
     private String color;
     private String status;
 
-    @JsonIgnore
     @Column(name = "date_created", updatable = false, insertable = false)
     private LocalDateTime dateCreated;
 

@@ -583,7 +583,7 @@ public class CardController {
     		log.info("Fetching all cards for the current user...");
     		List<Card> allCards = user.getRole().equals(ConstantsUtil.KEY_ADMIN) ?
     					cardService.getAllCards(sortFilters)
-    				:	cardService.getAllMemeberCards(username, sortFilters);
+    				:	cardService.getAllMemberCards(username, sortFilters);
     		
     		if(allCards ==  null || allCards.isEmpty()) {
     			log.info("No cards found.");
