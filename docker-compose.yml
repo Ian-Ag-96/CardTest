@@ -38,7 +38,7 @@ services:
     working_dir: /app
     command: ["mvn", "test"]
     environment:
-      SPRING_PROFILES_ACTIVE: test # Use test profile for testing
+      SPRING_PROFILES_ACTIVE: prod
 
 volumes:
   db_data:
