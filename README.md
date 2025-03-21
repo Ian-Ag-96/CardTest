@@ -13,7 +13,7 @@ An application that allows users to create and modify card information.
 # Configuration
 - Clone the repository from the command line if git is installed in your system using 'git clone https://github.com/Ian-Ag-96/CardTest.git' or any other cloning mechanism you may wish to use.
 - Navigate to the directory where the project resides and open the command line/terminal.
-- Run the command 'mvn clean install -DskipTests' if maven is already installed or 'mvnw clean install -DskipTests' - (Windows) or './mvnw clean install -DskipTests' (Linux) if it is not installed. We are skipping tests because we want to only build the jar file. A container called 'card_test_tests' will be created later on for specifically running tests.
+- Run the command 'mvn clean install -DskipTests' if maven is already installed or './mvnw clean install -DskipTests' - (Windows) or './mvnw clean install -DskipTests' (Linux) if it is not installed. We are skipping tests because we want to only build the jar file. A container called 'card_test_tests' will be created later on for specifically running tests.
 - After the jar file has been built successfully, ensure docker is running first then run the command 'docker-compose up --build' to download the necessary files, handle configurations, create all the containers, and start the application, including running tests. This may take some time as maven will have to be installed including its dependencies to handle tests.
 - For specific cases you may use the following commands:
 	- 'docker-compose up database' to only start the database and initialize the data
